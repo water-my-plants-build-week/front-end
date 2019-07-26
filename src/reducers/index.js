@@ -1,4 +1,4 @@
-import { REGISTER_START, REGISTER_SUCCESS, REGISTER_FAILURE } from "../actions";
+import { REGISTER_START, REGISTER_SUCCESS, REGISTER_FAILURE, LOGIN_START, LOGIN_SUCCESS, LOGIN_FAILURE } from "../actions";
 
 const initialState = {
   isLoading: false,
@@ -26,6 +26,26 @@ export default function reducer(state = initialState, action) {
         isLoading: false,
         errorMessage: action.payload
       };
+    }
+    case LOGIN_START: {
+      return {
+        ...state,
+        isLoading: true
+      }
+    }
+    case LOGIN_SUCCESS: {
+      return {
+        ...state,
+        isLoading: false,
+        errorMessage: null
+      }
+    }
+    case LOGIN_FAILURE: {
+      return {
+        ...state,
+        isLoading: false,
+        errorMessage: action.payload
+      }
     }
     default:
       return state;

@@ -23,7 +23,8 @@ export const registerUser = (
       dispatch({ type: REGISTER_SUCCESS });
     })
     .catch(() => {
-      dispatch({ type: REGISTER_FAILURE, payload: "Failed to register user" });
+      dispatch({ type: REGISTER_FAILURE, payload: "Failed to Register 😭" });
+      throw new Error('Failed to register')
     });
 };
 
