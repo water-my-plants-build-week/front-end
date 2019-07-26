@@ -25,7 +25,7 @@ class RegisterForm extends React.Component {
         console.log("success");
       })
       .catch(() => {
-        console.log("failure :(");
+        console.log("failure 😭");
       });
   };
 
@@ -34,6 +34,9 @@ class RegisterForm extends React.Component {
     const { handleSubmit, handleChange } = this;
 
     return (
+      <>
+      {this.props.errorMessage && <p style={{color: "red"}}>{this.props.errorMessage}</p>}
+
       <form onSubmit={handleSubmit}>
         <label htmlFor="username">Username</label>
         <input
@@ -63,6 +66,7 @@ class RegisterForm extends React.Component {
         />
         <button type="submit">Register</button>
       </form>
+      </>
     );
   }
 }
