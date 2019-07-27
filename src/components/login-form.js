@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import { login } from "../actions";
 
 import {
@@ -39,8 +39,7 @@ class LoginForm extends React.Component {
     this.props
       .login(username, password)
       .then(() => {
-        // TODO: Implement redirect on success
-        console.log("login success");
+        this.props.history.push("/");
       })
       .catch(() => {
         // TODO: Remove the console log and attempt to recover from error
@@ -102,7 +101,9 @@ const mapStateToProps = ({ isLoading, errorMessage }) => {
   };
 };
 
-export default connect(
-  mapStateToProps,
-  { login }
-)(LoginForm);
+export default withRouter(
+  connect(
+    mapStateToProps,
+    { login }
+  )(LoginForm)
+);
