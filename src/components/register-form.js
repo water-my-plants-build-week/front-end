@@ -90,7 +90,7 @@ class RegisterForm extends React.Component {
               value={phoneNumber}
               onChange={handleChange}
             />
-            <Button type="submit">Register</Button>
+            <Button type="submit">Sign up</Button>
             <P>Already have an account?</P>
             <Button as={Link} to="/login">
               Login

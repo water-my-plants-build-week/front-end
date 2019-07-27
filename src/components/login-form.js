@@ -82,7 +82,7 @@ class LoginForm extends React.Component {
               onChange={handleChange}
             />
 
-            <Button type="submit">Register</Button>
+            <Button type="submit">Login</Button>
 
             <P>Don't have an account?</P>
             <Button as={Link} to="/sign-up">
