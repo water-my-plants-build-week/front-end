@@ -1,17 +1,16 @@
 import React from "react";
 
-import RegisterForm from "../components/register-form";
 import LoginForm from "../components/login-form";
 
-const Login = () => {
-  return (
-    <>
-      <h1>Login Page</h1>
-      <RegisterForm />
-      <br />
-      <LoginForm />
-    </>
-  );
-};
+class Login extends React.Component {
+  render() {
+    return (
+      <>
+        <h1>Water My Plants</h1>
+        <LoginForm />
+      </>
+    );
+  }
+}
 
 export default Login;
