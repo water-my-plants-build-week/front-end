@@ -1,8 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
-import { registerUser } from "../actions";
+import { Link, withRouter } from "react-router-dom";
+import { registerUser, login } from "../actions";
 
 import {
   Input,
@@ -43,6 +43,9 @@ class RegisterForm extends React.Component {
         // TODO: Login user on successful sign up, and then redirect to the home
         // page
         console.log("success");
+        this.props.login(username, password).then(() => {
+          this.props.history.push("/");
+        });
       })
       .catch(() => {
         // TODO: Provide better information to the user, and/or attempt to
@@ -109,7 +112,9 @@ const mapStateToProps = ({ isLoading, errorMessage }) => {
   };
 };
 
-export default connect(
-  mapStateToProps,
-  { registerUser }
-)(RegisterForm);
+export default withRouter(
+  connect(
+    mapStateToProps,
+    { registerUser, login }
+  )(RegisterForm)
+);
