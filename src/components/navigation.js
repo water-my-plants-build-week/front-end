@@ -1,7 +1,7 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 
-export default function Navigation() {
+function Navigation({ history }) {
   const token = localStorage.getItem("token");
 
   return token ? (
@@ -11,15 +11,18 @@ export default function Navigation() {
           <Link to="/">Home</Link>
         </li>
         <li>
-          <Link to="/login">Login</Link>
-        </li>
-        <li>
-          <Link to="/sign-up">Sign Up</Link>
-        </li>
-        <li>
-          <Link to="/plant">Plant</Link>
+          <button
+            onClick={() => {
+              localStorage.removeItem("token");
+              history.push("/login");
+            }}
+          >
+            Log out
+          </button>
         </li>
       </ul>
     </nav>
   ) : null;
 }
+
+export default withRouter(Navigation);
