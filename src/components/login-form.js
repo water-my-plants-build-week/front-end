@@ -1,7 +1,24 @@
 import React from "react";
+import styled from "styled-components";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { login } from "../actions";
+
+import {
+  Input,
+  Label,
+  FormCard,
+  Form,
+  FormTitle,
+  Button
+} from "./form-components";
+
+// TODO: Remove duplicated styles
+const P = styled.p`
+  color white;
+  font-size: 18px;
+  margin: 1rem 0;
+`;
 
 class LoginForm extends React.Component {
   state = {
@@ -43,32 +60,36 @@ class LoginForm extends React.Component {
           <p style={{ color: "red" }}>{this.props.errorMessage}</p>
         )}
 
-        <form onSubmit={handleSubmit}>
-          <h2>Login</h2>
+        <FormCard>
+          <Form onSubmit={handleSubmit}>
+            <FormTitle>Login</FormTitle>
 
-          <label htmlFor="username">Username</label>
-          <input
-            id="username"
-            type="text"
-            name="username"
-            value={username}
-            onChange={handleChange}
-          />
+            <Label htmlFor="username">Username</Label>
+            <Input
+              id="username"
+              type="text"
+              name="username"
+              value={username}
+              onChange={handleChange}
+            />
 
-          <label htmlFor="password">Password</label>
-          <input
-            id="password"
-            type="password"
-            name="password"
-            value={password}
-            onChange={handleChange}
-          />
+            <Label htmlFor="password">Password</Label>
+            <Input
+              id="password"
+              type="password"
+              name="password"
+              value={password}
+              onChange={handleChange}
+            />
 
-          <button type="submit">Register</button>
+            <Button type="submit">Register</Button>
 
-          <p>Don't have an account?</p>
-          <Link to="/sign-up">Sign up</Link>
-        </form>
+            <P>Don't have an account?</P>
+            <Button as={Link} to="/sign-up">
+              Sign up
+            </Button>
+          </Form>
+        </FormCard>
       </>
     );
   }
