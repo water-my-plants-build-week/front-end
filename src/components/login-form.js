@@ -1,11 +1,29 @@
 import React from "react";
+import styled from "styled-components";
 import { connect } from "react-redux";
+import { Link, withRouter } from "react-router-dom";
 import { login } from "../actions";
+
+import {
+  Input,
+  Label,
+  FormCard,
+  Form,
+  FormTitle,
+  Button
+} from "./form-components";
+
+// TODO: Remove duplicated styles
+const P = styled.p`
+  color white;
+  font-size: 18px;
+  margin: 1rem 0;
+`;
 
 class LoginForm extends React.Component {
   state = {
     username: "",
-    password: "",
+    password: ""
   };
 
   handleChange = event => {
@@ -21,9 +39,12 @@ class LoginForm extends React.Component {
     this.props
       .login(username, password)
       .then(() => {
-        console.log("login success");
+        this.props.history.push("/");
       })
       .catch(() => {
+        // TODO: Remove the console log and attempt to recover from error
+        // or provide additional information to the user so they can know what
+        // they need to do.
         console.log("failure 😭");
       });
   };
@@ -34,29 +55,40 @@ class LoginForm extends React.Component {
 
     return (
       <>
-      {this.props.errorMessage && <p style={{color: "red"}}>{this.props.errorMessage}</p>}
+        {this.props.errorMessage && (
+          <p style={{ color: "red" }}>{this.props.errorMessage}</p>
+        )}
 
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="username">Username</label>
-        <input
-          id="username"
-          type="text"
-          name="username"
-          value={username}
-          onChange={handleChange}
-        />
+        <FormCard>
+          <Form onSubmit={handleSubmit}>
+            <FormTitle>Login</FormTitle>
 
-        <label htmlFor="password">Password</label>
-        <input
-          id="password"
-          type="password"
-          name="password"
-          value={password}
-          onChange={handleChange}
-        />
+            <Label htmlFor="username">Username</Label>
+            <Input
+              id="username"
+              type="text"
+              name="username"
+              value={username}
+              onChange={handleChange}
+            />
 
-        <button type="submit">Register</button>
-      </form>
+            <Label htmlFor="password">Password</Label>
+            <Input
+              id="password"
+              type="password"
+              name="password"
+              value={password}
+              onChange={handleChange}
+            />
+
+            <Button type="submit">Login</Button>
+
+            <P>Don't have an account?</P>
+            <Button as={Link} to="/sign-up">
+              Sign up
+            </Button>
+          </Form>
+        </FormCard>
       </>
     );
   }
@@ -69,7 +101,9 @@ const mapStateToProps = ({ isLoading, errorMessage }) => {
   };
 };
 
-export default connect(
-  mapStateToProps,
-  { login }
-)(LoginForm);
+export default withRouter(
+  connect(
+    mapStateToProps,
+    { login }
+  )(LoginForm)
+);

@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-import LoginForm from "../components/login-form";
+import RegisterForm from "../components/register-form";
 
 // TODO: Remove duplication and export into styled sheets
 const PageTitle = styled.h1`
@@ -11,15 +11,11 @@ const PageTitle = styled.h1`
   margin: 2.5rem 0;
 `;
 
-class Login extends React.Component {
-  render() {
-    return (
-      <>
-        <PageTitle>Water My Plants</PageTitle>
-        <LoginForm />
-      </>
-    );
-  }
+export default function SignUpPage() {
+  return (
+    <>
+      <PageTitle>Water My Plants</PageTitle>
+      <RegisterForm />
+    </>
+  );
 }
-
-export default Login;
