@@ -10,7 +10,7 @@ export const LOGIN_START = "LOGIN_START";
 export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
 export const LOGIN_FAILURE = "LOGIN_FAILURE";
 
-export const GETTING_PLANTS = "GETTINGS_PLANTS";
+export const GETTING_PLANTS = "GETTING_PLANTS";
 export const GOT_PLANTS = "GOT_PLANTS";
 export const ADDED_PLANTS = "ADDED_PLANTS";
 export const DELETED_PLANTS = "DELETED_PLANTS";
@@ -47,7 +47,7 @@ export const login = (username, password) => async dispatch => {
     });
 };
 
-export const getPlant = () => async dispatch => {
+export const getPlants = () => async dispatch => {
   dispatch({ type: GETTING_PLANTS });
   axios
     .get(`${BASE_URL}/api/plants/`)
@@ -64,7 +64,7 @@ export const addPlant = plant => async dispatch => {
     .then(res => dispatch({ type: ADDED_PLANTS, payload: res.data }));
 };
 
-export const detelePlant = id => dispatch => {
+export const deletePlant = id => dispatch => {
   dispatch({ type: GETTING_PLANTS });
   axios
     .delete(`${BASE_URL}/api/plants/${id}`)
