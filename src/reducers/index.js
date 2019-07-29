@@ -65,6 +65,13 @@ export default function reducer(state = initialState, action) {
         fetchingPlants: false
       }
     }
+    case ADDED_PLANTS: {
+      return {
+        ...state,
+        plants: action.payload,
+        fetchingPlants: false
+      }
+    }
     case DELETED_PLANTS: {
       return {
         ...state,
