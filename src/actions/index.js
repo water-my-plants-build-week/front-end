@@ -10,6 +10,11 @@ export const LOGIN_START = "LOGIN_START";
 export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
 export const LOGIN_FAILURE = "LOGIN_FAILURE";
 
+export const GETTING_PLANTS = "GETTINGS_PLANTS";
+export const GOT_PLANTS = "GOT_PLANTS";
+export const ADDED_PLANTS = "ADDED_PLANTS";
+export const DELETED_PLANTS = "DELETED_PLANTS";
+
 export const registerUser = (
   username,
   password,
@@ -39,5 +44,32 @@ export const login = (username, password) => async dispatch => {
     .catch(err => {
       dispatch({ type: LOGIN_FAILURE, payload: err.response.data.message });
       throw new Error("Failed to login");
+    });
+};
+
+export const getPlant = () => async dispatch => {
+  dispatch({ type: GETTING_PLANTS });
+  axios
+    .get(`${BASE_URL}/api/plants/`)
+    .then(res => dispatch({ type: GOT_PLANTS, payload: res.data }))
+    .catch(err => {
+      console.log(err);
+    });
+};
+
+export const addPlant = plant => async dispatch => {
+  dispatch({ type: GETTING_PLANTS });
+  axios
+    .post(`${BASE_URL}/api/plants/`, plant)
+    .then(res => dispatch({ type: ADDED_PLANTS, payload: res.data }));
+};
+
+export const detelePlant = id => dispatch => {
+  dispatch({ type: GETTING_PLANTS });
+  axios
+    .delete(`${BASE_URL}/api/plants/${id}`)
+    .then(res => dispatch({ type: DELETED_PLANTS, payload: res.data }))
+    .catch(err => {
+      console.log(err);
     });
 };
