@@ -1,6 +1,11 @@
-import { REGISTER_START, REGISTER_SUCCESS, REGISTER_FAILURE, LOGIN_START, LOGIN_SUCCESS, LOGIN_FAILURE } from "../actions";
+import { REGISTER_START, REGISTER_SUCCESS, REGISTER_FAILURE, LOGIN_START, LOGIN_SUCCESS, LOGIN_FAILURE, GETTING_PLANTS, GOT_PLANTS, ADDED_PLANTS, DELETED_PLANTS } from "../actions";
 
 const initialState = {
+  plants: [],
+  fetchingPlants: false,
+  addingPlants: false,
+  updatingPlants: false,
+  deletingPlants: false,
   isLoading: false,
   errorMessage: null
 };
@@ -45,6 +50,26 @@ export default function reducer(state = initialState, action) {
         ...state,
         isLoading: false,
         errorMessage: action.payload
+      }
+    }
+    case GETTING_PLANTS: {
+      return {
+        ...state,
+        fetchingPlants: true
+      }
+    }
+    case GOT_PLANTS: {
+      return {
+        ...state,
+        plants: action.payload,
+        fetchingPlants: false
+      }
+    }
+    case DELETED_PLANTS: {
+      return {
+        ...state,
+        plants: action.payload,
+        fetchingPlants: false
       }
     }
     default:
