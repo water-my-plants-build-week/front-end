@@ -14,6 +14,7 @@ function Navigation({ history }) {
           <button
             onClick={() => {
               localStorage.removeItem("token");
+              localStorage.removeItem("user");
               history.push("/login");
             }}
           >
