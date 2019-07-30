@@ -1,16 +1,19 @@
 import React from "react";
 import styled from "styled-components";
+import * as Yup from "yup";
+import { Formik } from "formik";
 import { connect } from "react-redux";
 import { Link, withRouter } from "react-router-dom";
 import { login } from "../actions";
 
 import {
-  Input,
-  Label,
+  Button,
   FormCard,
   Form,
+  FormError,
   FormTitle,
-  Button
+  Input,
+  Label
 } from "./form-components";
 
 // TODO: Remove duplicated styles
@@ -20,84 +23,111 @@ const P = styled.p`
   margin: 1rem 0;
 `;
 
-class LoginForm extends React.Component {
-  state = {
-    username: "",
-    password: ""
-  };
+const LoginSchema = Yup.object().shape({
+  username: Yup.string().required("Username is required"),
+  password: Yup.string().required("Password is required")
+});
 
-  handleChange = event => {
-    this.setState({
-      [event.target.name]: event.target.value
-    });
-  };
+/*
+ * TODO: Figure out why the automatic redirect doesn't work sometimes
+ * I was having intermittent issues with React-Router and Redux, it seems like
+ * it may be because of Blocked Updates.
+ *
+ * link: https://github.com/ReactTraining/react-router/blob/master/packages/react-router/docs/guides/redux.md#blocked-updates
+ *
+ * */
 
-  handleSubmit = event => {
-    event.preventDefault();
-    const { username, password } = this.state;
+function LoginForm({ login, errorMessage, history }) {
+  return (
+    <Formik
+      initialValues={{
+        username: "",
+        password: ""
+      }}
+      validationSchema={LoginSchema}
+      onSubmit={values => {
+        const { username, password } = values;
+        login(username, password)
+          .then(() => {
+            history.push("/plants");
+          })
+          .catch(err => {
+            if (process.env.NODE_ENV !== "production") {
+              console.error(err);
+            }
+          });
+      }}
+    >
+      {({
+        values,
+        errors,
+        touched,
+        handleSubmit,
+        handleChange,
+        handleBlur,
+        isSubmitting
+      }) => (
+        <>
+          {errorMessage ? (
+            <p style={{ color: "red", fontSize: "20px", fontWeight: 800 }}>
+              {errorMessage}
+            </p>
+          ) : (
+            <div style={{ height: "20px" }} />
+          )}
 
-    this.props
-      .login(username, password)
-      .then(() => {
-        this.props.history.push("/");
-      })
-      .catch(() => {
-        // TODO: Remove the console log and attempt to recover from error
-        // or provide additional information to the user so they can know what
-        // they need to do.
-        console.log("failure 😭");
-      });
-  };
+          <FormCard>
+            <Form onSubmit={handleSubmit}>
+              <FormTitle>Login</FormTitle>
 
-  render() {
-    const { username, password } = this.state;
-    const { handleSubmit, handleChange } = this;
+              <Label htmlFor="username">Username</Label>
+              <Input
+                id="username"
+                type="text"
+                name="username"
+                value={values.username}
+                onChange={handleChange}
+                onBlur={handleBlur}
+              />
 
-    return (
-      <>
-        {this.props.errorMessage && (
-          <p style={{ color: "red" }}>{this.props.errorMessage}</p>
-        )}
+              <FormError touched={touched.username} error={errors.username} />
 
-        <FormCard>
-          <Form onSubmit={handleSubmit}>
-            <FormTitle>Login</FormTitle>
+              <Label htmlFor="password">Password</Label>
+              <Input
+                id="password"
+                type="password"
+                name="password"
+                value={values.password}
+                onChange={handleChange}
+                onBlur={handleBlur}
+              />
+              <FormError touched={touched.password} error={errors.password} />
 
-            <Label htmlFor="username">Username</Label>
-            <Input
-              id="username"
-              type="text"
-              name="username"
-              value={username}
-              onChange={handleChange}
-            />
+              {/* 
+              
+                TODO: Add some sort of loading indication for the user so that they know the form is submitting
+              
+                  */}
+              <Button disabled={isSubmitting} type="submit">
+                Login
+              </Button>
 
-            <Label htmlFor="password">Password</Label>
-            <Input
-              id="password"
-              type="password"
-              name="password"
-              value={password}
-              onChange={handleChange}
-            />
-
-            <Button type="submit">Login</Button>
-
-            <P>Don't have an account?</P>
-            <Button as={Link} to="/sign-up">
-              Sign up
-            </Button>
-          </Form>
-        </FormCard>
-      </>
-    );
-  }
+              <P>Don't have an account?</P>
+              <Button disabled={isSubmitting} as={Link} to="/sign-up">
+                Sign up
+              </Button>
+            </Form>
+          </FormCard>
+        </>
+      )}
+    </Formik>
+  );
 }
 
-const mapStateToProps = ({ isLoading, errorMessage }) => {
+const mapStateToProps = state => {
   return {
-    isLoading,
-    errorMessage
+    isLoading: state.authorization.login.isLoading,
+    errorMessage: state.authorization.login.errorMessage
   };
 };
 
