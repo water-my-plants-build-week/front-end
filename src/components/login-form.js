@@ -41,11 +41,10 @@ class LoginForm extends React.Component {
       .then(() => {
         this.props.history.push("/");
       })
-      .catch(() => {
-        // TODO: Remove the console log and attempt to recover from error
-        // or provide additional information to the user so they can know what
-        // they need to do.
-        console.log("failure 😭");
+      .catch(err => {
+        if (process.env.NODE_ENV !== "production") {
+          console.error(err);
+        }
       });
   };
 
@@ -55,8 +54,12 @@ class LoginForm extends React.Component {
 
     return (
       <>
-        {this.props.errorMessage && (
-          <p style={{ color: "red" }}>{this.props.errorMessage}</p>
+        {this.props.errorMessage ? (
+          <p style={{ color: "red", fontSize: "20px", fontWeight: 800 }}>
+            {this.props.errorMessage}
+          </p>
+        ) : (
+          <div style={{ height: "20px" }} />
         )}
 
         <FormCard>
