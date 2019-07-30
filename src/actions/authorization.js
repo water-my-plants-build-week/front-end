@@ -92,7 +92,7 @@ export const login = (username, password) => async dispatch => {
        **/
 
       dispatch({
-        type: "LOGIN_SUCCESS",
+        type: LOGIN_SUCCESS,
         payload: {
           token: res.data.token,
           user: res.data.user
