@@ -10,6 +10,12 @@ import {
   login
 } from "./authorization";
 
+import {
+  FETCHING_USER_PLANTS_START,
+  FETCHING_USER_PLANTS_SUCCESS,
+  FETCHING_USER_PLANTS_FAILURE
+} from "./user";
+
 export const BASE_URL = "https://water-my-plants-lambda.herokuapp.com/api";
 
 export const GETTING_PLANTS = "GETTING_PLANTS";
@@ -17,12 +23,12 @@ export const GOT_PLANTS = "GOT_PLANTS";
 export const ADDED_PLANTS = "ADDED_PLANTS";
 export const DELETED_PLANTS = "DELETED_PLANTS";
 
-export const getPlants = () => async (dispatch, getState) => {
-  const { user } = getState();
-  const id = user ? user.id : "will catch";
-  console.log(id);
-
+export const getPlants = () => async dispatch => {
   dispatch({ type: GETTING_PLANTS });
+
+  const user = localStorage.getItem("user");
+  const { id } = JSON.parse(user);
+
   return axiosAuth()
     .get(`${BASE_URL}/users/${id}`)
     .then(res => {
@@ -64,5 +70,8 @@ export {
   LOGIN_SUCCESS,
   LOGIN_FAILURE,
   login,
-  registerUser
+  registerUser,
+  FETCHING_USER_PLANTS_START,
+  FETCHING_USER_PLANTS_SUCCESS,
+  FETCHING_USER_PLANTS_FAILURE
 };

@@ -1,98 +1,57 @@
+import { combineReducers } from "redux";
+
+import authorization from "./authorization";
+
 import {
-  REGISTER_START,
-  REGISTER_SUCCESS,
-  REGISTER_FAILURE,
-  LOGIN_START,
-  LOGIN_SUCCESS,
-  LOGIN_FAILURE,
   GETTING_PLANTS,
   GOT_PLANTS,
   ADDED_PLANTS,
   DELETED_PLANTS
 } from "../actions";
 
+/*
+ * TODO:
+ * extract this reducer into it's own slice
+ *
+ */
 const initialState = {
   plants: [],
-  fetchingPlants: false,
-  addingPlants: false,
-  updatingPlants: false,
-  deletingPlants: false,
   isLoading: false,
-  errorMessage: null,
-  user: null
+  errorMessage: null
 };
 
-export default function reducer(state = initialState, action) {
+function user(state = initialState, action) {
   switch (action.type) {
-    case REGISTER_START: {
-      return {
-        ...state,
-        isLoading: true
-      };
-    }
-    case REGISTER_SUCCESS: {
-      return {
-        ...state,
-        isLoading: false,
-        errorMessage: null
-      };
-    }
-    case REGISTER_FAILURE: {
-      return {
-        ...state,
-        isLoading: false,
-        errorMessage: action.payload.message
-      };
-    }
-    case LOGIN_START: {
-      return {
-        ...state,
-        isLoading: true
-      };
-    }
-    case LOGIN_SUCCESS: {
-      return {
-        ...state,
-        isLoading: false,
-        user: action.payload.user,
-        errorMessage: null
-      };
-    }
-    case LOGIN_FAILURE: {
-      return {
-        ...state,
-        isLoading: false,
-        errorMessage: action.payload.message
-      };
-    }
     case GETTING_PLANTS: {
       return {
         ...state,
-        fetchingPlants: true
+        isLoading: true
       };
     }
     case GOT_PLANTS: {
       return {
         ...state,
         plants: action.payload,
-        fetchingPlants: false
+        isLoading: false
       };
     }
     case ADDED_PLANTS: {
       return {
         ...state,
         plants: state.plants.concat(action.payload),
-        fetchingPlants: false
+        isLoading: false
       };
     }
     case DELETED_PLANTS: {
       return {
         ...state,
         plants: action.payload,
-        fetchingPlants: false
+        isLoading: false
       };
     }
     default:
       return state;
   }
 }
+
+export default combineReducers({ authorization, user });
