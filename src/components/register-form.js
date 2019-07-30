@@ -1,5 +1,7 @@
 import React from "react";
 import styled from "styled-components";
+import * as Yup from "yup";
+import { Formik } from "formik";
 import { connect } from "react-redux";
 import { Link, withRouter } from "react-router-dom";
 import { registerUser, login } from "../actions";
@@ -10,7 +12,8 @@ import {
   Button,
   Form,
   FormCard,
-  FormTitle
+  FormTitle,
+  FormError
 } from "./form-components";
 
 // TODO: Remove duplicated styles
@@ -20,89 +23,135 @@ const P = styled.p`
   margin: 1rem 0;
 `;
 
-class RegisterForm extends React.Component {
-  state = {
-    username: "",
-    password: "",
-    phoneNumber: ""
-  };
+const RegisterSchema = Yup.object().shape({
+  username: Yup.string()
+    .min(5, "Please make your username at least five characters in length")
+    // .matches(/^((?![\w]+).)*$/, "Username should not contain spaces")
+    .required("Enter a username"),
+  password: Yup.string()
+    .min(5, "Please make your password at least five characters in length")
+    .required(),
+  phoneNumber: Yup.string()
+    .length(10, "Please enter a valid phone number with 10 digits")
+    .matches(/\d{10}/, "Phone numbers should only contain digits")
+    .required("Please enter a phone number"),
+  timezone: Yup.string().required("Enter a city")
+});
 
-  handleChange = event => {
-    this.setState({
-      [event.target.name]: event.target.value
-    });
-  };
+function RegisterForm({ registerUser, login, errorMessage, history }) {
+  return (
+    <Formik
+      initialValues={{
+        username: "",
+        password: "",
+        phoneNumber: "",
+        timezone: ""
+      }}
+      validationSchema={RegisterSchema}
+      onSubmit={values => {
+        registerUser(values)
+          .then(() => {
+            login(values.username, values.password)
+              .then(() => {
+                history.push("/plants");
+              })
+              .catch(err => {
+                if (process.env.NODE_ENV !== "production") {
+                  console.error(err);
+                }
+              });
+          })
+          .catch(err => {
+            if (process.env.NODE_ENV !== "production") {
+              console.error(err);
+            }
+          });
+      }}
+    >
+      {({
+        values,
+        errors,
+        touched,
+        handleSubmit,
+        handleChange,
+        handleBlur,
+        isSubmitting
+      }) => (
+        <>
+          {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
 
-  handleSubmit = event => {
-    event.preventDefault();
-    const { username, password, phoneNumber } = this.state;
+          <FormCard>
+            <Form onSubmit={handleSubmit}>
+              <FormTitle>Sign Up</FormTitle>
+              <Label htmlFor="username">Username</Label>
+              <Input
+                id="username"
+                type="text"
+                name="username"
+                value={values.username}
+                onChange={handleChange}
+                onBlur={handleBlur}
+              />
+              <FormError touched={touched.username} error={errors.username} />
 
-    this.props
-      .registerUser(username, password, phoneNumber)
-      .then(() => {
-        // TODO: Login user on successful sign up, and then redirect to the home
-        // page
-        console.log("success");
-        this.props.login(username, password).then(() => {
-          this.props.history.push("/");
-        });
-      })
-      .catch(() => {
-        // TODO: Provide better information to the user, and/or attempt to
-        // recover from the error if possible
-        console.log("failure 😭");
-      });
-  };
+              <Label htmlFor="password">Password</Label>
+              <Input
+                id="password"
+                type="password"
+                name="password"
+                value={values.password}
+                onChange={handleChange}
+                onBlur={handleBlur}
+              />
+              <FormError touched={touched.password} error={errors.password} />
 
-  render() {
-    const { username, password, phoneNumber } = this.state;
-    const { handleSubmit, handleChange } = this;
+              <Label htmlFor="phoneNumber">Phone Number</Label>
+              <Input
+                id="phoneNumber"
+                type="text"
+                name="phoneNumber"
+                value={values.phoneNumber}
+                onChange={handleChange}
+                onBlur={handleBlur}
+              />
+              <FormError
+                touched={touched.phoneNumber}
+                error={errors.phoneNumber}
+              />
 
-    return (
-      <>
-        {this.props.errorMessage && (
-          <p style={{ color: "red" }}>{this.props.errorMessage}</p>
-        )}
+              <Label htmlFor="timezone">Enter Your City</Label>
+              <P style={{ alignSelf: "flex-start", margin: 0 }}>
+                This is used to set the time zone for your reminders
+              </P>
+              <Input
+                id="timezone"
+                type="text"
+                name="timezone"
+                value={values.timezone}
+                onChange={handleChange}
+                onBlur={handleBlur}
+              />
+              <FormError touched={touched.timezone} error={errors.timezone} />
 
-        <FormCard>
-          <Form onSubmit={handleSubmit}>
-            <FormTitle>Sign Up</FormTitle>
-            <Label htmlFor="username">Username</Label>
-            <Input
-              id="username"
-              type="text"
-              name="username"
-              value={username}
-              onChange={handleChange}
-            />
+              {/* 
+              
+                TODO: Add some sort of loading indication for the user so that they know the form is submitting
+              
+                  */}
 
-            <Label htmlFor="password">Password</Label>
-            <Input
-              id="password"
-              type="password"
-              name="password"
-              value={password}
-              onChange={handleChange}
-            />
-
-            <Label htmlFor="phoneNumber">Phone Number</Label>
-            <Input
-              id="phoneNumber"
-              type="text"
-              name="phoneNumber"
-              value={phoneNumber}
-              onChange={handleChange}
-            />
-            <Button type="submit">Sign up</Button>
-            <P>Already have an account?</P>
-            <Button as={Link} to="/login">
-              Login
-            </Button>
-          </Form>
-        </FormCard>
-      </>
-    );
-  }
+              <Button disabled={isSubmitting} type="submit">
+                Sign up
+              </Button>
+              <P>Already have an account?</P>
+              <Button disabled={isSubmitting} as={Link} to="/login">
+                Login
+              </Button>
+            </Form>
+          </FormCard>
+        </>
+      )}
+    </Formik>
+  );
 }
 
 const mapStateToProps = ({ isLoading, errorMessage }) => {

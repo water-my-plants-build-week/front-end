@@ -1,3 +1,4 @@
+import React from "react";
 import styled from "styled-components";
 
 const Input = styled.input`
@@ -67,4 +68,16 @@ const Button = styled.button`
   }
 `;
 
-export { Input, Label, FormCard, Form, FormTitle, Button };
+function FormError({ touched, error }) {
+  return touched && error ? (
+    <p
+      style={{ fontSize: "16px", color: "#f5df80", textTransform: "uppercase" }}
+    >
+      {error}
+    </p>
+  ) : (
+    <div style={{ height: "16px" }} />
+  );
+}
+
+export { Input, Label, FormCard, Form, FormTitle, Button, FormError };
