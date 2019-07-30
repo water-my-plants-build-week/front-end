@@ -1,60 +1,26 @@
-import axios from "axios";
-
 import axiosAuth from "../middleware/axios-auth";
+import {
+  REGISTER_START,
+  REGISTER_SUCCESS,
+  REGISTER_FAILURE,
+  LOGIN_START,
+  LOGIN_SUCCESS,
+  LOGIN_FAILURE,
+  registerUser,
+  login
+} from "./authorization";
 
-const BASE_URL = "https://water-my-plants-lambda.herokuapp.com/api";
-
-export const REGISTER_START = "REGISTER_START";
-export const REGISTER_SUCCESS = "REGISTER_SUCCESS";
-export const REGISTER_FAILURE = "REGISTER_FAILURE";
-
-export const LOGIN_START = "LOGIN_START";
-export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
-export const LOGIN_FAILURE = "LOGIN_FAILURE";
+export const BASE_URL = "https://water-my-plants-lambda.herokuapp.com/api";
 
 export const GETTING_PLANTS = "GETTING_PLANTS";
 export const GOT_PLANTS = "GOT_PLANTS";
 export const ADDED_PLANTS = "ADDED_PLANTS";
 export const DELETED_PLANTS = "DELETED_PLANTS";
 
-export const registerUser = (
-  username,
-  password,
-  phoneNumber
-) => async dispatch => {
-  dispatch({ type: REGISTER_START });
-
-  return axios
-    .post(`${BASE_URL}/auth/register`, { username, password, phoneNumber })
-    .then(() => {
-      dispatch({ type: REGISTER_SUCCESS });
-    })
-    .catch(() => {
-      dispatch({ type: REGISTER_FAILURE, payload: "Failed to Register 😭" });
-      throw new Error("Failed to register");
-    });
-};
-
-export const login = (username, password) => async dispatch => {
-  dispatch({ type: LOGIN_START });
-
-  return axios
-    .post(`${BASE_URL}/auth/login`, { username, password })
-    .then(res => {
-      const userId = res.data.user.id;
-
-      localStorage.setItem("userId", userId);
-
-      dispatch({ type: LOGIN_SUCCESS, payload: res.data.token });
-    })
-    .catch(err => {
-      dispatch({ type: LOGIN_FAILURE, payload: err.response.data.message });
-      throw new Error("Failed to login");
-    });
-};
-
-export const getPlants = () => async dispatch => {
-  const id = localStorage.getItem("userId");
+export const getPlants = () => async (dispatch, getState) => {
+  const { user } = getState();
+  const id = user ? user.id : "will catch";
+  console.log(id);
 
   dispatch({ type: GETTING_PLANTS });
   return axiosAuth()
@@ -88,4 +54,15 @@ export const deletePlant = id => async dispatch => {
     .catch(err => {
       console.log(err);
     });
+};
+
+export {
+  REGISTER_START,
+  REGISTER_FAILURE,
+  REGISTER_SUCCESS,
+  LOGIN_START,
+  LOGIN_SUCCESS,
+  LOGIN_FAILURE,
+  login,
+  registerUser
 };
