@@ -40,7 +40,7 @@ function LoginForm({ login, errorMessage, history }) {
         const { username, password } = values;
         login(username, password)
           .then(() => {
-            history.push("/");
+            history.push("/plants");
           })
           .catch(err => {
             if (process.env.NODE_ENV !== "production") {
@@ -115,10 +115,10 @@ function LoginForm({ login, errorMessage, history }) {
   );
 }
 
-const mapStateToProps = ({ isLoading, errorMessage }) => {
+const mapStateToProps = state => {
   return {
-    isLoading,
-    errorMessage
+    isLoading: state.authorization.login.isLoading,
+    errorMessage: state.authorization.login.errorMessage
   };
 };
 

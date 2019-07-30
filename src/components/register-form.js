@@ -154,10 +154,10 @@ function RegisterForm({ registerUser, login, errorMessage, history }) {
   );
 }
 
-const mapStateToProps = ({ isLoading, errorMessage }) => {
+const mapStateToProps = state => {
   return {
-    isLoading,
-    errorMessage
+    isLoading: state.authorization.registration.isLoading,
+    errorMessage: state.authorization.registration.errorMessage
   };
 };
 
