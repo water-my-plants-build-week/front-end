@@ -8,7 +8,7 @@ function Navigation({ history }) {
     <nav>
       <ul>
         <li>
-          <Link to="/">Home</Link>
+          <Link to="/plants">Home</Link>
         </li>
         <li>
           <button

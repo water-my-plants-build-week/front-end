@@ -33,6 +33,6 @@ export default function PrivateRoute({ component, render, ...props }) {
 }
 
 PrivateRoute.propTypes = {
-  path: PropTypes.string.isRequired,
+  path: PropTypes.string,
   render: PropTypes.func
 };

@@ -28,6 +28,15 @@ const LoginSchema = Yup.object().shape({
   password: Yup.string().required("Password is required")
 });
 
+/*
+ * TODO: Figure out why the automatic redirect doesn't work sometimes
+ * I was having intermittent issues with React-Router and Redux, it seems like
+ * it may be because of Blocked Updates.
+ *
+ * link: https://github.com/ReactTraining/react-router/blob/master/packages/react-router/docs/guides/redux.md#blocked-updates
+ *
+ * */
+
 function LoginForm({ login, errorMessage, history }) {
   return (
     <Formik
