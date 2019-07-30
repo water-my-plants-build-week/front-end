@@ -1,4 +1,15 @@
-import { REGISTER_START, REGISTER_SUCCESS, REGISTER_FAILURE, LOGIN_START, LOGIN_SUCCESS, LOGIN_FAILURE, GETTING_PLANTS, GOT_PLANTS, ADDED_PLANTS, DELETED_PLANTS } from "../actions";
+import {
+  REGISTER_START,
+  REGISTER_SUCCESS,
+  REGISTER_FAILURE,
+  LOGIN_START,
+  LOGIN_SUCCESS,
+  LOGIN_FAILURE,
+  GETTING_PLANTS,
+  GOT_PLANTS,
+  ADDED_PLANTS,
+  DELETED_PLANTS
+} from "../actions";
 
 const initialState = {
   plants: [],
@@ -7,7 +18,8 @@ const initialState = {
   updatingPlants: false,
   deletingPlants: false,
   isLoading: false,
-  errorMessage: null
+  errorMessage: null,
+  user: null
 };
 
 export default function reducer(state = initialState, action) {
@@ -29,55 +41,56 @@ export default function reducer(state = initialState, action) {
       return {
         ...state,
         isLoading: false,
-        errorMessage: action.payload
+        errorMessage: action.payload.message
       };
     }
     case LOGIN_START: {
       return {
         ...state,
         isLoading: true
-      }
+      };
     }
     case LOGIN_SUCCESS: {
       return {
         ...state,
         isLoading: false,
+        user: action.payload.user,
         errorMessage: null
-      }
+      };
     }
     case LOGIN_FAILURE: {
       return {
         ...state,
         isLoading: false,
-        errorMessage: action.payload
-      }
+        errorMessage: action.payload.message
+      };
     }
     case GETTING_PLANTS: {
       return {
         ...state,
         fetchingPlants: true
-      }
+      };
     }
     case GOT_PLANTS: {
       return {
         ...state,
         plants: action.payload,
         fetchingPlants: false
-      }
+      };
     }
     case ADDED_PLANTS: {
       return {
         ...state,
         plants: state.plants.concat(action.payload),
         fetchingPlants: false
-      }
+      };
     }
     case DELETED_PLANTS: {
       return {
         ...state,
         plants: action.payload,
         fetchingPlants: false
-      }
+      };
     }
     default:
       return state;
