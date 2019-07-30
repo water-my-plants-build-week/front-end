@@ -41,6 +41,10 @@ export const login = (username, password) => async dispatch => {
   return axios
     .post(`${BASE_URL}/auth/login`, { username, password })
     .then(res => {
+      const userId = res.data.user.id;
+
+      localStorage.setItem("userId", userId);
+
       dispatch({ type: LOGIN_SUCCESS, payload: res.data.token });
     })
     .catch(err => {
@@ -50,12 +54,14 @@ export const login = (username, password) => async dispatch => {
 };
 
 export const getPlants = () => async dispatch => {
+  const id = localStorage.getItem("userId");
+
   dispatch({ type: GETTING_PLANTS });
-  return axiosAuth() 
-    .get(`${BASE_URL}/plants/`)
+  return axiosAuth()
+    .get(`${BASE_URL}/users/${id}`)
     .then(res => {
-      console.log(res)
-      dispatch({ type: GOT_PLANTS, payload: res.data })})
+      dispatch({ type: GOT_PLANTS, payload: res.data.plants });
+    })
     .catch(err => {
       console.log(err);
     });
@@ -66,8 +72,9 @@ export const addPlant = plant => async dispatch => {
   return axiosAuth()
     .post(`${BASE_URL}/plants/`, plant)
     .then(res => {
-      console.log(res)
-      dispatch({ type: ADDED_PLANTS, payload: res.data })});
+      console.log(res);
+      dispatch({ type: ADDED_PLANTS, payload: res.data });
+    });
 };
 
 export const deletePlant = id => async dispatch => {
@@ -75,8 +82,9 @@ export const deletePlant = id => async dispatch => {
   return axiosAuth()
     .delete(`${BASE_URL}/plants/${id}`)
     .then(res => {
-      console.log(res)
-      dispatch({ type: DELETED_PLANTS, payload: res.data })})
+      console.log(res);
+      dispatch({ type: DELETED_PLANTS, payload: res.data });
+    })
     .catch(err => {
       console.log(err);
     });
