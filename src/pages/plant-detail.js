@@ -8,6 +8,7 @@ class PlantDetail extends React.Component {
     return (
       <>
       <h1>Plant Detail Page</h1>
+
       <Plant />
       </>
     );
