@@ -68,7 +68,7 @@ export default function reducer(state = initialState, action) {
     case ADDED_PLANTS: {
       return {
         ...state,
-        plants: action.payload,
+        plants: state.plants.concat(action.payload),
         fetchingPlants: false
       }
     }

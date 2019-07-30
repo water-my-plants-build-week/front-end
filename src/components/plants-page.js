@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { getPlants, addPlant, deletePlant } from '../actions';
 
-class Plant extends Component {
+class Plant extends React.Component {
     state = {
         plantName: '',
         dailyWaterTime: ''
@@ -43,10 +43,10 @@ class Plant extends Component {
                 {this.props.plants.map( (plantName, index) => (
                     <div key={index}>
                         <span> {plantName.name} </span>
-                        <p>Plant: </p>
-                        <p>Water Time: </p>
+                        <p>Plant: {plantName.plantName} </p>
+                        <p>Water Time: {plantName.dailyWaterTime} </p>
                     </div>
-                    ))}
+                ))}
             </div>
             </>
         )

@@ -1,5 +1,7 @@
 import axios from "axios";
 
+import axiosAuth from "../middleware/axios-auth";
+
 const BASE_URL = "https://water-my-plants-lambda.herokuapp.com/api";
 
 export const REGISTER_START = "REGISTER_START";
@@ -49,9 +51,11 @@ export const login = (username, password) => async dispatch => {
 
 export const getPlants = () => async dispatch => {
   dispatch({ type: GETTING_PLANTS });
-  axios
-    .get(`${BASE_URL}/api/plants/`)
-    .then(res => dispatch({ type: GOT_PLANTS, payload: res.data }))
+  return axiosAuth() 
+    .get(`${BASE_URL}/plants/`)
+    .then(res => {
+      console.log(res)
+      dispatch({ type: GOT_PLANTS, payload: res.data })})
     .catch(err => {
       console.log(err);
     });
@@ -59,16 +63,20 @@ export const getPlants = () => async dispatch => {
 
 export const addPlant = plant => async dispatch => {
   dispatch({ type: GETTING_PLANTS });
-  axios
-    .post(`${BASE_URL}/api/plants/`, plant)
-    .then(res => dispatch({ type: ADDED_PLANTS, payload: res.data }));
+  return axiosAuth()
+    .post(`${BASE_URL}/plants/`, plant)
+    .then(res => {
+      console.log(res)
+      dispatch({ type: ADDED_PLANTS, payload: res.data })});
 };
 
-export const deletePlant = id => dispatch => {
+export const deletePlant = id => async dispatch => {
   dispatch({ type: GETTING_PLANTS });
-  axios
-    .delete(`${BASE_URL}/api/plants/${id}`)
-    .then(res => dispatch({ type: DELETED_PLANTS, payload: res.data }))
+  return axiosAuth()
+    .delete(`${BASE_URL}/plants/${id}`)
+    .then(res => {
+      console.log(res)
+      dispatch({ type: DELETED_PLANTS, payload: res.data })})
     .catch(err => {
       console.log(err);
     });
