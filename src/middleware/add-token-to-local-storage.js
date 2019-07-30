@@ -6,7 +6,7 @@ const addTokenToLocalStorage = _store => next => action => {
     localStorage.setItem("token", token);
   }
 
-  next({ type: action.type });
+  next(action);
 };
 
 export default addTokenToLocalStorage;
