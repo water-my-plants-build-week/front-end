@@ -6,8 +6,10 @@ import plants from "./plants";
 import {
   GETTING_PLANTS,
   GOT_PLANTS,
-  ADDED_PLANTS,
-  DELETED_PLANTS
+  DELETED_PLANTS,
+  FETCHING_USER_PLANTS_START,
+  FETCHING_USER_PLANTS_SUCCESS,
+  FETCHING_USER_PLANTS_FAILURE
 } from "../actions";
 
 /*
@@ -36,7 +38,19 @@ function user(state = initialState, action) {
         isLoading: false
       };
     }
-    case ADDED_PLANTS: {
+    case FETCHING_USER_PLANTS_START: {
+      return {
+        ...state,
+        isLoading: true
+      };
+    }
+    case FETCHING_USER_PLANTS_FAILURE: {
+      return {
+        ...state,
+        isLoading: false
+      };
+    }
+    case FETCHING_USER_PLANTS_SUCCESS: {
       return {
         ...state,
         plants: state.plants.concat(action.payload),
