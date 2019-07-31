@@ -1,6 +1,7 @@
 import { combineReducers } from "redux";
 
 import authorization from "./authorization";
+import plants from "./plants";
 
 import {
   GETTING_PLANTS,
@@ -54,4 +55,4 @@ function user(state = initialState, action) {
   }
 }
 
-export default combineReducers({ authorization, user });
+export default combineReducers({ authorization, user, plants });
