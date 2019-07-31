@@ -13,41 +13,22 @@ import {
 import {
   FETCHING_USER_PLANTS_START,
   FETCHING_USER_PLANTS_SUCCESS,
-  FETCHING_USER_PLANTS_FAILURE
+  FETCHING_USER_PLANTS_FAILURE,
+  getPlants
 } from "./user";
+
+import {
+  CREATE_PLANT_START,
+  CREATE_PLANT_SUCCESS,
+  CREATE_PLANT_FAILURE,
+  createPlant
+} from "./plants";
 
 export const BASE_URL = "https://water-my-plants-lambda.herokuapp.com/api";
 
 export const GETTING_PLANTS = "GETTING_PLANTS";
 export const GOT_PLANTS = "GOT_PLANTS";
-export const ADDED_PLANTS = "ADDED_PLANTS";
 export const DELETED_PLANTS = "DELETED_PLANTS";
-
-export const getPlants = () => async dispatch => {
-  dispatch({ type: GETTING_PLANTS });
-
-  const user = localStorage.getItem("user");
-  const { id } = JSON.parse(user);
-
-  return axiosAuth()
-    .get(`${BASE_URL}/users/${id}`)
-    .then(res => {
-      dispatch({ type: GOT_PLANTS, payload: res.data.plants });
-    })
-    .catch(err => {
-      console.log(err);
-    });
-};
-
-export const addPlant = plant => async dispatch => {
-  dispatch({ type: GETTING_PLANTS });
-  return axiosAuth()
-    .post(`${BASE_URL}/plants/`, plant)
-    .then(res => {
-      console.log(res);
-      dispatch({ type: ADDED_PLANTS, payload: res.data });
-    });
-};
 
 export const deletePlant = id => async dispatch => {
   dispatch({ type: GETTING_PLANTS });
@@ -73,5 +54,10 @@ export {
   registerUser,
   FETCHING_USER_PLANTS_START,
   FETCHING_USER_PLANTS_SUCCESS,
-  FETCHING_USER_PLANTS_FAILURE
+  FETCHING_USER_PLANTS_FAILURE,
+  CREATE_PLANT_START,
+  CREATE_PLANT_FAILURE,
+  CREATE_PLANT_SUCCESS,
+  createPlant,
+  getPlants
 };
