@@ -1,7 +1,8 @@
 import React from "react";
-import { Link, Route } from "react-router-dom";
+import { Link, Route, Switch } from "react-router-dom";
 import { connect } from "react-redux";
 import { getPlants } from "../actions";
+import NewPlantsForm from "../components/plants-page";
 
 // TODO: Extract component
 function PlantsList({ plants, isLoading }) {
@@ -21,7 +22,7 @@ function PlantsList({ plants, isLoading }) {
             appealing
         */}
 
-        <button>Add a plant</button>
+        <Link to="/plants/new/">Add a plant</Link>
       </>
     );
   }
@@ -57,8 +58,10 @@ class PlantsPage extends React.Component {
   render() {
     return (
       <div>
+        <Switch>
+        <Route path={`${this.props.match.path}/new/`} component={NewPlantsForm} />
         <Route
-          path={`/plants/:id`}
+          path={`${this.props.match.path}/:id`}
           render={props => {
             const plant = this.props.plants.find(
               plant => plant.id === Number(props.match.params.id)
@@ -75,7 +78,7 @@ class PlantsPage extends React.Component {
 
         <Route
           exact
-          path="/plants"
+          path={`${this.props.match.path}`}
           render={props => (
             <PlantsList
               isLoading={this.props.isLoading}
@@ -84,10 +87,12 @@ class PlantsPage extends React.Component {
             />
           )}
         />
+        </Switch>
       </div>
     );
   }
 }
+
 
 const mapStateToProps = state => ({
   plants: state.user.plants,

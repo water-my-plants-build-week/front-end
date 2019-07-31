@@ -1,64 +1,67 @@
 import React from "react";
 import { connect } from "react-redux";
 import { getPlants, addPlant, deletePlant } from "../actions";
+import * as Yup from "yup";
+import { Formik } from "formik";
+import { FormCard, Form, Input, FormError } from "./form-components";
+
+const PlantSchema = Yup.object().shape({
+  plantName: Yup.string().required("Plant name is required"),
+  dailyWaterTime: Yup.string().matches(/^\d{2}:\d{2}:\d{2}$/, "Required Time Format - HR:MM:SS").required("Watering time is required")
+});
 
 class Plant extends React.Component {
-  state = {
-    plantName: "",
-    dailyWaterTime: ""
-  };
-
-  componentDidMount() {
-    this.props.getPlants();
-  }
-
-  handleChanges = e => {
-    this.setState({ [e.target.name]: e.target.value });
-  };
-
-  addPlant = e => {
-    e.preventDefault();
-    this.props.addPlant(this.state);
-    this.setState({ plantName: "", dailyWaterTime: "" });
-  };
-
-  deletePlant = (e, id) => {
-    console.log(e);
-    this.props.deletePlant(id);
-  };
 
   render() {
     return (
-      <>
-        <form onSubmit={this.addPlant}>
-          <nav>
-            <h1>Add a Plant</h1>
-          </nav>
+      <Formik
+        initialValues={{
+          plantName: "",
+          dailyWaterTime: ""
+        }}
+        validationSchema={PlantSchema}
+        onSubmit={values => {
+          console.log(values)
+        }}>
+          {({
+            values,
+            errors,
+            touched,
+            handleSubmit,
+            handleChange,
+            handleBlur,
+            isSubmitting
+          }) => (
+            <FormCard>
+              <Form onSubmit={handleSubmit}>
+                <nav>
+                  <h1>Add a Plant</h1>
+                </nav>
 
-          <input
-            placeholder="Plant Name"
-            value={this.state.plantName}
-            onChange={this.handleChanges}
-            name="plantName"
-          />
-          <input
-            placeholder="Time to Water Plant"
-            value={this.state.dailyWaterTime}
-            onChange={this.handleChanges}
-            name="dailyWaterTime"
-          />
-          <button type="submit">Add Plant</button>
-        </form>
-        <div>
-          {this.props.plants.map((plantName, index) => (
-            <div key={index}>
-              <span> {plantName.name} </span>
-              <p>Plant: {plantName.plantName} </p>
-              <p>Water Time: {plantName.dailyWaterTime} </p>
-            </div>
-          ))}
-        </div>
-      </>
+                <Input
+                  placeholder="Plant Name"
+                  value={values.plantName}
+                  onChange={handleChange}
+                  name="plantName"
+                />
+
+                <FormError touched={touched.plantName} error={errors.plantName} name={"plantName"} /> 
+                
+
+                <Input
+                  placeholder="Time to Water Plant"
+                  value={values.dailyWaterTime}
+                  onChange={handleChange}
+                  name="dailyWaterTime"
+                />
+
+                <FormError touched={touched.dailyWaterTime} error={errors.dailyWaterTime} name={"dailyWaterTime"} /> 
+
+                <button type="submit">Complete</button>
+              </Form>
+            </FormCard>
+          )}        
+      </Formik>
     );
   }
 }
