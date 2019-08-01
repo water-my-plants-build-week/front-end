@@ -1,19 +1,13 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
 import { connect } from "react-redux";
-import {
-  getPlants,
-  getReminders,
-  updatePlant,
-  createPlant,
-  deletePlant,
-  createReminder
-} from "../../actions";
-import PlantsForm from "../../components/plant-form";
-import ReminderForm from "../../components/reminder-form";
+import { getPlants, getReminders } from "../../actions";
 
 import PlantDetail from "./detail";
 import PlantsList from "./list";
+import NewReminder from "./new-reminder";
+import EditPlant from "./edit";
+import NewPlant from "./new";
 
 class PlantsPage extends React.Component {
   componentDidMount() {
@@ -25,110 +19,9 @@ class PlantsPage extends React.Component {
     return (
       <div>
         <Switch>
-          <Route
-            path={`/plants/:id/reminder/new`}
-            render={props => {
-              const plant = this.props.plants.find(
-                plant => plant.id === Number(props.match.params.id)
-              );
-              const user = JSON.parse(localStorage.getItem("user"));
-              return (
-                <ReminderForm
-                  formTitle="Create Reminder"
-                  submitText="Add Reminder"
-                  onSubmit={date =>
-                    this.props
-                      .createReminder({
-                        plantName: plant.plantName,
-                        phoneNumber: user.phoneNumber,
-                        timeZone: user.timezone,
-                        user_id: user.id,
-                        notification: true,
-                        time: `${date} ${plant.dailyWaterTime}`
-                      })
-                      .then(() => {
-                        this.props
-                          .getReminders()
-                          .then(() => props.history.push(`/plants/${plant.id}`))
-                          .catch(err => console.log(err));
-                      })
-                      .catch(err => console.log(err))
-                  }
-                />
-              );
-            }}
-          />
-          <Route
-            path={`/plants/:id/edit`}
-            render={props => {
-              const plant = this.props.plants.find(
-                plant => plant.id === Number(props.match.params.id)
-              );
-
-              // TODO: Check for plant === undefined and render somethign else
-              return this.props.isLoading ? (
-                <p>Fetching your plants</p>
-              ) : plant ? (
-                <PlantsForm
-                  formTitle="Edit Plant"
-                  submitText="Update Plant"
-                  onSubmit={values =>
-                    this.props
-                      .updatePlant(props.match.params.id, values)
-                      .then(() => {
-                        this.props
-                          .getPlants()
-                          .then(() => props.history.push("/plants"))
-                          .catch(err => {
-                            if (process.env.NODE_ENV !== "production") {
-                              console.error(err);
-                            }
-                          });
-                      })
-                      .catch(err => {
-                        if (process.env.NODE_ENV !== "production") {
-                          console.error(err);
-                        }
-                      })
-                  }
-                  plantName={plant.plantName}
-                  dailyWaterTime={plant.dailyWaterTime}
-                  {...props}
-                />
-              ) : (
-                <>No plant found</>
-              );
-            }}
-          />
-          <Route
-            path={`${this.props.match.path}/new/`}
-            render={props => (
-              <PlantsForm
-                formTitle="Create Plant"
-                submitText="Add Plant"
-                onSubmit={values =>
-                  this.props
-                    .createPlant(values)
-                    .then(() => {
-                      this.props
-                        .getPlants()
-                        .then(() => props.history.push("/plants"))
-                        .catch(err => {
-                          if (process.env.NODE_ENV !== "production") {
-                            console.error(err);
-                          }
-                        });
-                    })
-                    .catch(err => {
-                      if (process.env.NODE_ENV !== "production") {
-                        console.error(err);
-                      }
-                    })
-                }
-                {...props}
-              />
-            )}
-          />
+          <Route path={`/plants/:id/reminder/new`} component={NewReminder} />
+          <Route path={`/plants/:id/edit`} component={EditPlant} />
+          <Route path={`${this.props.match.path}/new/`} component={NewPlant} />
           <Route
             path={`${this.props.match.path}/:id`}
             component={PlantDetail}
@@ -145,20 +38,10 @@ class PlantsPage extends React.Component {
   }
 }
 
-const mapStateToProps = state => ({
-  plants: state.user.plants,
-  reminders: state.user.reminders,
-  isLoading: state.user.isLoading
-});
-
 export default connect(
-  mapStateToProps,
+  null,
   {
     getPlants,
-    updatePlant,
-    createPlant,
-    deletePlant,
-    getReminders,
-    createReminder
+    getReminders
   }
 )(PlantsPage);
