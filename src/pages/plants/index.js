@@ -13,44 +13,7 @@ import PlantsForm from "../../components/plant-form";
 import ReminderForm from "../../components/reminder-form";
 
 import PlantDetail from "./detail";
-
-// TODO: Extract component
-function PlantsList({ plants, isLoading }) {
-  // TODO: Implement a better loading indicator
-
-  if (isLoading) {
-    return <p>Loading...</p>;
-  }
-
-  if (plants.length === 0) {
-    return (
-      <>
-        <h2>No Plants In Your Greenhouse</h2>
-        {/* 
-            TODO: make a link to a plants/new page with a form to create a new plant.
-            Maybe add an SVG or some icon of some kind to make it more visually
-            appealing
-        */}
-
-        <Link to="/plants/new/">Add a plant</Link>
-      </>
-    );
-  }
-
-  return (
-    <>
-      {plants.map((plant, index) => (
-        <div key={index}>
-          <Link to={`/plants/${plant.id}`}>
-            <p>Plant: {plant.plantName}</p>
-            <p>Water Time: {plant.dailyWaterTime} </p>
-          </Link>
-        </div>
-      ))}
-      <Link to="/plants/new/">Add a plant</Link>
-    </>
-  );
-}
+import PlantsList from "./list";
 
 class PlantsPage extends React.Component {
   componentDidMount() {
@@ -174,13 +137,7 @@ class PlantsPage extends React.Component {
           <Route
             exact
             path={`${this.props.match.path}`}
-            render={props => (
-              <PlantsList
-                isLoading={this.props.isLoading}
-                plants={this.props.plants}
-                {...props}
-              />
-            )}
+            component={PlantsList}
           />
         </Switch>
       </div>
