@@ -1,8 +1,8 @@
 import React from "react";
 import { Link, Route, Switch } from "react-router-dom";
 import { connect } from "react-redux";
-import { getPlants } from "../actions";
-import NewPlantsForm from "../components/plants-page";
+import { getPlants, updatePlant, createPlant, deletePlant } from "../actions";
+import PlantsForm from "../components/plant-form";
 
 // TODO: Extract component
 function PlantsList({ plants, isLoading }) {
@@ -27,17 +27,22 @@ function PlantsList({ plants, isLoading }) {
     );
   }
 
-  return plants.map((plant, index) => (
-    <div key={index}>
-      <Link to={`/plants/${plant.id}`}>
-        <p>Plant: {plant.plantName}</p>
-        <p>Water Time: {plant.dailyWaterTime} </p>
-      </Link>
-    </div>
-  ));
+  return (
+    <>
+      {plants.map((plant, index) => (
+        <div key={index}>
+          <Link to={`/plants/${plant.id}`}>
+            <p>Plant: {plant.plantName}</p>
+            <p>Water Time: {plant.dailyWaterTime} </p>
+          </Link>
+        </div>
+      ))}
+      <Link to="/plants/new/">Add a plant</Link>
+    </>
+  );
 }
 
-function PlantDetail({ plantName, dailyWaterTime }) {
+function PlantDetail({ plantName, dailyWaterTime, match, deletePlant }) {
   // TODO:
   // Implement ability to edit, and delete plant,
   // as well as viewing reminders for the plant,
@@ -46,6 +51,8 @@ function PlantDetail({ plantName, dailyWaterTime }) {
     <>
       <p>{plantName}</p>
       <p>{dailyWaterTime}</p>
+      <Link to={`/plants/${match.params.id}/edit`}>Edit</Link>
+      <button onClick={deletePlant}>Delete Plant</button>
     </>
   );
 }
@@ -59,40 +66,128 @@ class PlantsPage extends React.Component {
     return (
       <div>
         <Switch>
-        <Route path={`${this.props.match.path}/new/`} component={NewPlantsForm} />
-        <Route
-          path={`${this.props.match.path}/:id`}
-          render={props => {
-            const plant = this.props.plants.find(
-              plant => plant.id === Number(props.match.params.id)
-            );
-            return (
-              <PlantDetail
-                isLoading={this.props.isLoading}
-                {...plant}
+          <Route
+            path={`/plants/:id/edit`}
+            render={props => {
+              const plant = this.props.plants.find(
+                plant => plant.id === Number(props.match.params.id)
+              );
+
+              // TODO: Check for plant === undefined and render somethign else
+              return this.props.isLoading ? (
+                <p>Fetching your plants</p>
+              ) : plant ? (
+                <PlantsForm
+                  formTitle="Edit Plant"
+                  submitText="Update Plant"
+                  onSubmit={values =>
+                    this.props
+                      .updatePlant(props.match.params.id, values)
+                      .then(() => {
+                        this.props
+                          .getPlants()
+                          .then(() => props.history.push("/plants"))
+                          .catch(err => {
+                            if (process.env.NODE_ENV !== "production") {
+                              console.error(err);
+                            }
+                          });
+                      })
+                      .catch(err => {
+                        if (process.env.NODE_ENV !== "production") {
+                          console.error(err);
+                        }
+                      })
+                  }
+                  plantName={plant.plantName}
+                  dailyWaterTime={plant.dailyWaterTime}
+                  {...props}
+                />
+              ) : (
+                <>No plant found</>
+              );
+            }}
+          />
+          <Route
+            path={`${this.props.match.path}/new/`}
+            render={props => (
+              <PlantsForm
+                formTitle="Create Plant"
+                submitText="Add Plant"
+                onSubmit={values =>
+                  this.props
+                    .createPlant(values)
+                    .then(() => {
+                      this.props
+                        .getPlants()
+                        .then(() => props.history.push("/plants"))
+                        .catch(err => {
+                          if (process.env.NODE_ENV !== "production") {
+                            console.error(err);
+                          }
+                        });
+                    })
+                    .catch(err => {
+                      if (process.env.NODE_ENV !== "production") {
+                        console.error(err);
+                      }
+                    })
+                }
                 {...props}
               />
-            );
-          }}
-        />
+            )}
+          />
+          <Route
+            path={`${this.props.match.path}/:id`}
+            render={props => {
+              const plant = this.props.plants.find(
+                plant => plant.id === Number(props.match.params.id)
+              );
+              return (
+                <PlantDetail
+                  deletePlant={() =>
+                    this.props
+                      .deletePlant(props.match.params.id)
+                      .then(() =>
+                        this.props
+                          .getPlants()
+                          .then(() => props.history.push("/plants"))
+                          .catch(err => {
+                            if (process.env.NODE_ENV !== "production") {
+                              console.error(err);
+                            }
+                          })
+                      )
+                      .catch(err => {
+                        if (process.env.NODE_ENV !== "production") {
+                          console.error(err);
+                        }
+                      })
+                  }
+                  isLoading={this.props.isLoading}
+                  {...plant}
+                  {...props}
+                />
+              );
+            }}
+          />
 
-        <Route
-          exact
-          path={`${this.props.match.path}`}
-          render={props => (
-            <PlantsList
-              isLoading={this.props.isLoading}
-              plants={this.props.plants}
-              {...props}
-            />
-          )}
-        />
+          <Route
+            exact
+            path={`${this.props.match.path}`}
+            render={props => (
+              <PlantsList
+                isLoading={this.props.isLoading}
+                plants={this.props.plants}
+                {...props}
+              />
+            )}
+          />
         </Switch>
       </div>
     );
   }
 }
-
 
 const mapStateToProps = state => ({
   plants: state.user.plants,
@@ -101,5 +196,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { getPlants }
+  { getPlants, updatePlant, createPlant, deletePlant }
 )(PlantsPage);

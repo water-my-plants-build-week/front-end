@@ -2,7 +2,14 @@ import React from "react";
 import { connect } from "react-redux";
 import * as Yup from "yup";
 import { Formik } from "formik";
-import { FormCard, Form, Input, FormError } from "./form-components";
+import {
+  FormCard,
+  Form,
+  Input,
+  FormError,
+  FormTitle,
+  Button
+} from "./form-components";
 
 import { createPlant, getPlants } from "../actions";
 
@@ -14,34 +21,21 @@ const PlantSchema = Yup.object().shape({
 });
 
 class Plant extends React.Component {
+  static defaultProps = {
+    plantName: "",
+    dailyWaterTime: ""
+  };
+
   render() {
     return (
       <Formik
         initialValues={{
-          plantName: "",
-          dailyWaterTime: ""
+          plantName: this.props.plantName,
+          dailyWaterTime: this.props.dailyWaterTime
         }}
         validationSchema={PlantSchema}
         onSubmit={values => {
-          this.props
-            .createPlant(values)
-            .then(() => {
-              this.props
-                .getPlants()
-                .then(() => {
-                  this.props.history.push("/plants");
-                })
-                .catch(err => {
-                  if (process.env.NODE_ENV !== "production") {
-                    console.error(err);
-                  }
-                });
-            })
-            .catch(err => {
-              if (process.env.NODE_ENV !== "production") {
-                console.error(err);
-              }
-            });
+          this.props.onSubmit(values);
         }}
       >
         {({
@@ -56,7 +50,7 @@ class Plant extends React.Component {
           <FormCard>
             <Form onSubmit={handleSubmit}>
               <nav>
-                <h1>Add a Plant</h1>
+                <FormTitle>{this.props.formTitle}</FormTitle>
               </nav>
 
               <Input
@@ -87,9 +81,9 @@ class Plant extends React.Component {
                 name={"dailyWaterTime"}
               />
 
-              <button disabled={isSubmitting} type="submit">
-                Complete
-              </button>
+              <Button disabled={isSubmitting} type="submit">
+                {this.props.submitText}
+              </Button>
             </Form>
           </FormCard>
         )}

@@ -1,7 +1,7 @@
 import {
-  CREATE_PLANT_START,
-  CREATE_PLANT_SUCCESS,
-  CREATE_PLANT_FAILURE
+  PLANT_REQUEST_START,
+  PLANT_REQUEST_SUCCESS,
+  PLANT_REQUEST_FAILURE
 } from "../actions";
 
 const initialState = {
@@ -11,20 +11,20 @@ const initialState = {
 
 export default function plant(state = initialState, action) {
   switch (action.type) {
-    case CREATE_PLANT_START: {
+    case PLANT_REQUEST_START: {
       return {
         ...state,
         isLoading: true
       };
     }
-    case CREATE_PLANT_SUCCESS: {
+    case PLANT_REQUEST_SUCCESS: {
       return {
         ...state,
         isLoading: false,
         errorMessage: null
       };
     }
-    case CREATE_PLANT_FAILURE: {
+    case PLANT_REQUEST_FAILURE: {
       return {
         ...state,
         isLoading: false,
