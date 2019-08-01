@@ -1,8 +1,16 @@
 import React from "react";
 import { Link, Route, Switch } from "react-router-dom";
 import { connect } from "react-redux";
-import { getPlants, updatePlant, createPlant, deletePlant } from "../actions";
+import {
+  getPlants,
+  getReminders,
+  updatePlant,
+  createPlant,
+  deletePlant,
+  createReminder
+} from "../actions";
 import PlantsForm from "../components/plant-form";
+import ReminderForm from "../components/reminder-form";
 
 // TODO: Extract component
 function PlantsList({ plants, isLoading }) {
@@ -42,7 +50,13 @@ function PlantsList({ plants, isLoading }) {
   );
 }
 
-function PlantDetail({ plantName, dailyWaterTime, match, deletePlant }) {
+function PlantDetail({
+  plantName,
+  dailyWaterTime,
+  match,
+  deletePlant,
+  reminders
+}) {
   // TODO:
   // Implement ability to edit, and delete plant,
   // as well as viewing reminders for the plant,
@@ -51,6 +65,19 @@ function PlantDetail({ plantName, dailyWaterTime, match, deletePlant }) {
     <>
       <p>{plantName}</p>
       <p>{dailyWaterTime}</p>
+      <p>Reminders</p>
+      {reminders.length === 0 ? (
+        <p>No Reminders</p>
+      ) : (
+        reminders.map(reminder => (
+          <>
+            <p>
+              Remember to water {plantName} at {reminder.time}
+            </p>
+          </>
+        ))
+      )}
+      <Link to={`/plants/${match.params.id}/reminder/new`}>Add reminder</Link>
       <Link to={`/plants/${match.params.id}/edit`}>Edit</Link>
       <button onClick={deletePlant}>Delete Plant</button>
     </>
@@ -60,12 +87,46 @@ function PlantDetail({ plantName, dailyWaterTime, match, deletePlant }) {
 class PlantsPage extends React.Component {
   componentDidMount() {
     this.props.getPlants();
+    this.props.getReminders();
   }
 
   render() {
     return (
       <div>
         <Switch>
+          <Route
+            path={`/plants/:id/reminder/new`}
+            render={props => {
+              const plant = this.props.plants.find(
+                plant => plant.id === Number(props.match.params.id)
+              );
+              const user = JSON.parse(localStorage.getItem("user"));
+              return (
+                <ReminderForm
+                  formTitle="Create Reminder"
+                  submitText="Add Reminder"
+                  onSubmit={values =>
+                    this.props
+                      .createReminder({
+                        plantName: plant.plantName,
+                        phoneNumber: user.phoneNumber,
+                        timeZone: user.timezone,
+                        user_id: user.id,
+                        notification: true,
+                        time: `${values.date} ${plant.dailyWaterTime}`
+                      })
+                      .then(() => {
+                        this.props
+                          .getReminders()
+                          .then(() => props.history.push(`/plants/${plant.id}`))
+                          .catch(err => console.log(err));
+                      })
+                      .catch(err => console.log(err))
+                  }
+                />
+              );
+            }}
+          />
           <Route
             path={`/plants/:id/edit`}
             render={props => {
@@ -143,8 +204,13 @@ class PlantsPage extends React.Component {
               const plant = this.props.plants.find(
                 plant => plant.id === Number(props.match.params.id)
               );
+              const reminders = this.props.reminders.filter(
+                reminder => reminder.plantName === plant.plantName
+              );
+
               return (
                 <PlantDetail
+                  reminders={reminders}
                   deletePlant={() =>
                     this.props
                       .deletePlant(props.match.params.id)
@@ -191,10 +257,18 @@ class PlantsPage extends React.Component {
 
 const mapStateToProps = state => ({
   plants: state.user.plants,
+  reminders: state.user.reminders,
   isLoading: state.user.isLoading
 });
 
 export default connect(
   mapStateToProps,
-  { getPlants, updatePlant, createPlant, deletePlant }
+  {
+    getPlants,
+    updatePlant,
+    createPlant,
+    deletePlant,
+    getReminders,
+    createReminder
+  }
 )(PlantsPage);

@@ -8,8 +8,12 @@ import {
   Input,
   FormError,
   FormTitle,
-  Button
+  Button,
+  Label
 } from "./form-components";
+
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 import { createPlant, getPlants } from "../actions";
 
@@ -53,7 +57,9 @@ class Plant extends React.Component {
                 <FormTitle>{this.props.formTitle}</FormTitle>
               </nav>
 
+              <Label htmlFor="plantName">Plant Name</Label>
               <Input
+                id="plantName"
                 placeholder="Plant Name"
                 value={values.plantName}
                 onChange={handleChange}
@@ -67,7 +73,9 @@ class Plant extends React.Component {
                 name={"plantName"}
               />
 
+              <Label htmlFor="dailyWaterTime">Daily Water Time</Label>
               <Input
+                id="dailyWaterTime"
                 placeholder="Time to Water Plant"
                 value={values.dailyWaterTime}
                 onChange={handleChange}
