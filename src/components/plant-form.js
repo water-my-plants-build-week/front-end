@@ -12,9 +12,6 @@ import {
   Label
 } from "./form-components";
 
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-
 import { createPlant, getPlants } from "../actions";
 
 const PlantSchema = Yup.object().shape({

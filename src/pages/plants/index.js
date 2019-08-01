@@ -8,9 +8,11 @@ import {
   createPlant,
   deletePlant,
   createReminder
-} from "../actions";
-import PlantsForm from "../components/plant-form";
-import ReminderForm from "../components/reminder-form";
+} from "../../actions";
+import PlantsForm from "../../components/plant-form";
+import ReminderForm from "../../components/reminder-form";
+
+import PlantDetail from "./detail";
 
 // TODO: Extract component
 function PlantsList({ plants, isLoading }) {
@@ -46,40 +48,6 @@ function PlantsList({ plants, isLoading }) {
         </div>
       ))}
       <Link to="/plants/new/">Add a plant</Link>
-    </>
-  );
-}
-
-function PlantDetail({
-  plantName,
-  dailyWaterTime,
-  match,
-  deletePlant,
-  reminders
-}) {
-  // TODO:
-  // Implement ability to edit, and delete plant,
-  // as well as viewing reminders for the plant,
-  // and creating a new reminder
-  return (
-    <>
-      <p>{plantName}</p>
-      <p>{dailyWaterTime}</p>
-      <p>Reminders</p>
-      {reminders.length === 0 ? (
-        <p>No Reminders</p>
-      ) : (
-        reminders.map(reminder => (
-          <>
-            <p>
-              Remember to water {plantName} at {reminder.time}
-            </p>
-          </>
-        ))
-      )}
-      <Link to={`/plants/${match.params.id}/reminder/new`}>Add reminder</Link>
-      <Link to={`/plants/${match.params.id}/edit`}>Edit</Link>
-      <button onClick={deletePlant}>Delete Plant</button>
     </>
   );
 }
@@ -200,42 +168,7 @@ class PlantsPage extends React.Component {
           />
           <Route
             path={`${this.props.match.path}/:id`}
-            render={props => {
-              const plant = this.props.plants.find(
-                plant => plant.id === Number(props.match.params.id)
-              );
-              const reminders = this.props.reminders.filter(
-                reminder => reminder.plantName === plant.plantName
-              );
-
-              return (
-                <PlantDetail
-                  reminders={reminders}
-                  deletePlant={() =>
-                    this.props
-                      .deletePlant(props.match.params.id)
-                      .then(() =>
-                        this.props
-                          .getPlants()
-                          .then(() => props.history.push("/plants"))
-                          .catch(err => {
-                            if (process.env.NODE_ENV !== "production") {
-                              console.error(err);
-                            }
-                          })
-                      )
-                      .catch(err => {
-                        if (process.env.NODE_ENV !== "production") {
-                          console.error(err);
-                        }
-                      })
-                  }
-                  isLoading={this.props.isLoading}
-                  {...plant}
-                  {...props}
-                />
-              );
-            }}
+            component={PlantDetail}
           />
 
           <Route
