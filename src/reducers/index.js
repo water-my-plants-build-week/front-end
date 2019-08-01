@@ -53,7 +53,7 @@ function user(state = initialState, action) {
     case FETCHING_USER_PLANTS_SUCCESS: {
       return {
         ...state,
-        plants: state.plants.concat(action.payload),
+        plants: action.payload,
         isLoading: false
       };
     }
