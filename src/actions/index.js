@@ -13,7 +13,11 @@ import {
   FETCHING_USER_PLANTS_START,
   FETCHING_USER_PLANTS_SUCCESS,
   FETCHING_USER_PLANTS_FAILURE,
-  getPlants
+  FETCHING_USER_REMINDERS_START,
+  FETCHING_USER_REMINDERS_SUCCESS,
+  FETCHING_USER_REMINDERS_FAILURE,
+  getPlants,
+  getReminders
 } from "./user";
 
 import {
@@ -24,6 +28,15 @@ import {
   updatePlant,
   deletePlant
 } from "./plants";
+
+import {
+  REMINDER_REQUEST_START,
+  REMINDER_REQUEST_SUCCESS,
+  REMINDER_REQUEST_FAILURE,
+  createReminder,
+  updateReminder,
+  deleteReminder
+} from "./reminders";
 
 export const BASE_URL = "https://water-my-plants-lambda.herokuapp.com/api";
 
@@ -45,5 +58,15 @@ export {
   deletePlant,
   PLANT_REQUEST_START,
   PLANT_REQUEST_FAILURE,
-  PLANT_REQUEST_SUCCESS
+  PLANT_REQUEST_SUCCESS,
+  FETCHING_USER_REMINDERS_START,
+  FETCHING_USER_REMINDERS_SUCCESS,
+  FETCHING_USER_REMINDERS_FAILURE,
+  getReminders,
+  REMINDER_REQUEST_START,
+  REMINDER_REQUEST_SUCCESS,
+  REMINDER_REQUEST_FAILURE,
+  createReminder,
+  updateReminder,
+  deleteReminder
 };
