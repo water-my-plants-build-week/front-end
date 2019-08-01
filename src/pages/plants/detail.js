@@ -3,24 +3,13 @@ import { format } from "date-fns";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 
-import {
-  deletePlant,
-  getPlants,
-  deleteReminder,
-  getReminders
-} from "../../actions";
-
-// TODO:
-// Add ability to delete reminder
-// Move functionality to delete a plant up into this page
+import { deletePlant, deleteReminder } from "../../actions";
 
 function PlantDetail({
   plant,
   match,
   deletePlant,
   deleteReminder,
-  getReminders,
-  getPlants,
   history,
   reminders,
   isLoading
@@ -33,7 +22,6 @@ function PlantDetail({
   const handleDeletePlant = async () => {
     try {
       await deletePlant(match.params.id);
-      await getPlants();
       history.push("/plants");
     } catch (e) {
       if (process.env.NODE_ENV !== "production") {
@@ -45,7 +33,6 @@ function PlantDetail({
   const handleDeleteReminder = async id => {
     try {
       await deleteReminder(id);
-      await getReminders();
     } catch (e) {
       if (process.env.NODE_ENV !== "production") {
         console.error(e.message);
@@ -128,5 +115,5 @@ const mapStateToProps = (state, ownProps) => {
 
 export default connect(
   mapStateToProps,
-  { deletePlant, getPlants, deleteReminder, getReminders }
+  { deletePlant, deleteReminder }
 )(PlantDetail);
