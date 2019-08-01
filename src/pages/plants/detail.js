@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Link, withRouter } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import { deletePlant, getPlants } from "../../actions";
 
@@ -66,8 +66,11 @@ const mapStateToProps = (state, ownProps) => {
     plant => plant.id === Number(ownProps.match.params.id)
   );
 
-  // Because plant might be undefined even for a brief second,
-  // we need to guard against checking it's properties
+  /*
+   * Because plant might be undefined even for a brief second,
+   * we need to guard against checking it's properties
+   */
+
   const reminders = plant
     ? state.user.reminders.filter(
         reminder => reminder.plantName === plant.plantName
@@ -77,23 +80,19 @@ const mapStateToProps = (state, ownProps) => {
   return {
     plant,
     reminders,
-    isLoading: state.user.isLoading,
+
+    /*
+     * Because both the plant and the reminders could be fetched by accessing
+     * this page, we want to make sure that there isn't flashes and un-flashes
+     * of loading state if one request finishes before the other is ready.
+     */
+
+    isLoading: state.user.fetchingPlants || state.user.fetchingReminders,
     errorMessage: state.user.errorMessage
   };
 };
 
-/*
- * Even though this is a Route component that is being passed props from react
- * router, we have to wrap it in the withRouter HOC because of an issue with
- * Redux sometimes blocking updates.
- *
- * link: https://github.com/ReactTraining/react-router/blob/master/packages/react-router/docs/guides/redux.md#blocked-updates
- *
- */
-
-export default withRouter(
-  connect(
-    mapStateToProps,
-    { deletePlant, getPlants }
-  )(PlantDetail)
-);
+export default connect(
+  mapStateToProps,
+  { deletePlant, getPlants }
+)(PlantDetail);
