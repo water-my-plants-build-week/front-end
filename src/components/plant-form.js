@@ -8,7 +8,8 @@ import {
   Input,
   FormError,
   FormTitle,
-  Button
+  Button,
+  Label
 } from "./form-components";
 
 import { createPlant, getPlants } from "../actions";
@@ -16,7 +17,10 @@ import { createPlant, getPlants } from "../actions";
 const PlantSchema = Yup.object().shape({
   plantName: Yup.string().required("Plant name is required"),
   dailyWaterTime: Yup.string()
-    .matches(/^\d{2}:\d{2}:\d{2}$/, "Required Time Format - HR:MM:SS")
+    .matches(
+      /^([0-1]\d|[1-9]):[0-6]\d ?(am|pm)$/i,
+      "Required Time Format - HR:MM and either am or pm"
+    )
     .required("Watering time is required")
 });
 
@@ -53,7 +57,9 @@ class Plant extends React.Component {
                 <FormTitle>{this.props.formTitle}</FormTitle>
               </nav>
 
+              <Label htmlFor="plantName">Plant Name</Label>
               <Input
+                id="plantName"
                 placeholder="Plant Name"
                 value={values.plantName}
                 onChange={handleChange}
@@ -67,7 +73,9 @@ class Plant extends React.Component {
                 name={"plantName"}
               />
 
+              <Label htmlFor="dailyWaterTime">Daily Water Time</Label>
               <Input
+                id="dailyWaterTime"
                 placeholder="Time to Water Plant"
                 value={values.dailyWaterTime}
                 onChange={handleChange}

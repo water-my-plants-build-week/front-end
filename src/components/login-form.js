@@ -29,7 +29,6 @@ const LoginSchema = Yup.object().shape({
 });
 
 /*
- * TODO: Figure out why the automatic redirect doesn't work sometimes
  * I was having intermittent issues with React-Router and Redux, it seems like
  * it may be because of Blocked Updates.
  *
