@@ -17,7 +17,10 @@ import { createPlant, getPlants } from "../actions";
 const PlantSchema = Yup.object().shape({
   plantName: Yup.string().required("Plant name is required"),
   dailyWaterTime: Yup.string()
-    .matches(/^\d{2}:\d{2}:\d{2}$/, "Required Time Format - HR:MM:SS")
+    .matches(
+      /^([0-1]\d|[1-9]):[0-6]\d ?(am|pm)$/i,
+      "Required Time Format - HR:MM and either am or pm"
+    )
     .required("Watering time is required")
 });
 
