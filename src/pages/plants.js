@@ -105,7 +105,7 @@ class PlantsPage extends React.Component {
                 <ReminderForm
                   formTitle="Create Reminder"
                   submitText="Add Reminder"
-                  onSubmit={values =>
+                  onSubmit={date =>
                     this.props
                       .createReminder({
                         plantName: plant.plantName,
@@ -113,7 +113,7 @@ class PlantsPage extends React.Component {
                         timeZone: user.timezone,
                         user_id: user.id,
                         notification: true,
-                        time: `${values.date} ${plant.dailyWaterTime}`
+                        time: `${date} ${plant.dailyWaterTime}`
                       })
                       .then(() => {
                         this.props
