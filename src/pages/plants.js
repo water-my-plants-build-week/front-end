@@ -1,8 +1,8 @@
 import React from "react";
 import { Link, Route, Switch } from "react-router-dom";
 import { connect } from "react-redux";
-import { getPlants, updatePlant, createPlant } from "../actions";
-import PlantsForm from "../components/plants-page";
+import { getPlants, updatePlant, createPlant, deletePlant } from "../actions";
+import PlantsForm from "../components/plant-form";
 
 // TODO: Extract component
 function PlantsList({ plants, isLoading }) {
@@ -42,7 +42,7 @@ function PlantsList({ plants, isLoading }) {
   );
 }
 
-function PlantDetail({ plantName, dailyWaterTime, match }) {
+function PlantDetail({ plantName, dailyWaterTime, match, deletePlant }) {
   // TODO:
   // Implement ability to edit, and delete plant,
   // as well as viewing reminders for the plant,
@@ -52,6 +52,7 @@ function PlantDetail({ plantName, dailyWaterTime, match }) {
       <p>{plantName}</p>
       <p>{dailyWaterTime}</p>
       <Link to={`/plants/${match.params.id}/edit`}>Edit</Link>
+      <button onClick={deletePlant}>Delete Plant</button>
     </>
   );
 }
@@ -142,6 +143,25 @@ class PlantsPage extends React.Component {
               );
               return (
                 <PlantDetail
+                  deletePlant={() =>
+                    this.props
+                      .deletePlant(props.match.params.id)
+                      .then(() =>
+                        this.props
+                          .getPlants()
+                          .then(() => props.history.push("/plants"))
+                          .catch(err => {
+                            if (process.env.NODE_ENV !== "production") {
+                              console.error(err);
+                            }
+                          })
+                      )
+                      .catch(err => {
+                        if (process.env.NODE_ENV !== "production") {
+                          console.error(err);
+                        }
+                      })
+                  }
                   isLoading={this.props.isLoading}
                   {...plant}
                   {...props}
@@ -174,5 +194,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { getPlants, updatePlant, createPlant }
+  { getPlants, updatePlant, createPlant, deletePlant }
 )(PlantsPage);

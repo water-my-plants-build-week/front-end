@@ -4,9 +4,6 @@ import authorization from "./authorization";
 import plants from "./plants";
 
 import {
-  GETTING_PLANTS,
-  GOT_PLANTS,
-  DELETED_PLANTS,
   FETCHING_USER_PLANTS_START,
   FETCHING_USER_PLANTS_SUCCESS,
   FETCHING_USER_PLANTS_FAILURE
@@ -25,19 +22,6 @@ const initialState = {
 
 function user(state = initialState, action) {
   switch (action.type) {
-    case GETTING_PLANTS: {
-      return {
-        ...state,
-        isLoading: true
-      };
-    }
-    case GOT_PLANTS: {
-      return {
-        ...state,
-        plants: action.payload,
-        isLoading: false
-      };
-    }
     case FETCHING_USER_PLANTS_START: {
       return {
         ...state,
@@ -51,13 +35,6 @@ function user(state = initialState, action) {
       };
     }
     case FETCHING_USER_PLANTS_SUCCESS: {
-      return {
-        ...state,
-        plants: action.payload,
-        isLoading: false
-      };
-    }
-    case DELETED_PLANTS: {
       return {
         ...state,
         plants: action.payload,
