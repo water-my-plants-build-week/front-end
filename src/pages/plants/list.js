@@ -21,14 +21,16 @@ function PlantsList({ plants, isLoading }) {
 
   return (
     <>
-      {plants.map((plant, index) => (
-        <div key={index}>
-          <Link to={`/plants/${plant.id}`}>
-            <p>Plant: {plant.plantName}</p>
-            <p>Water Time: {plant.dailyWaterTime} </p>
-          </Link>
-        </div>
-      ))}
+      <ul>
+        {plants.map((plant, index) => (
+          <li key={index}>
+            <Link to={`/plants/${plant.id}`}>
+              <p>Plant: {plant.plantName}</p>
+              <p>Water Time: {plant.dailyWaterTime} </p>
+            </Link>
+          </li>
+        ))}
+      </ul>
       <Link to="/plants/new/">Add a plant</Link>
     </>
   );
@@ -37,7 +39,7 @@ function PlantsList({ plants, isLoading }) {
 const mapStateToProps = state => {
   return {
     plants: state.user.plants,
-    isLoading: state.user.isLoading
+    isLoading: state.user.fetchingPlants
   };
 };
 
