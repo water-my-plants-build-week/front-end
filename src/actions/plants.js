@@ -7,7 +7,7 @@ export const PLANT_REQUEST_FAILURE = "PLANT_REQUEST_FAILURE";
 
 export const PLANT_CREATE_SUCCESS = "PLANT_CREATE_SUCCESS";
 export const PLANT_DELETE_SUCCESS = "PLANT_DELETE_SUCCESS";
-export const PLANT_UPDATE_SUCCESS = "PLANT_DELETE_SUCCESS";
+export const PLANT_UPDATE_SUCCESS = "PLANT_UPDATE_SUCCESS";
 
 export const createPlant = plant => async dispatch => {
   dispatch({ type: PLANT_REQUEST_START });
