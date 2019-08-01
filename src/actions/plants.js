@@ -5,6 +5,10 @@ export const CREATE_PLANT_START = "CREATE_PLANT_START";
 export const CREATE_PLANT_SUCCESS = "CREATE_PLANT_SUCCESS";
 export const CREATE_PLANT_FAILURE = "CREATE_PLANT_FAILURE";
 
+export const UPDATE_PLANT_START = "UPDATE_PLANT_START";
+export const UPDATE_PLANT_SUCCESS = "CREATE_PLANT_SUCCESS";
+export const UPDATE_PLANT_FAILURE = "UPDATE_PLANT_FAILURE";
+
 export const createPlant = plant => async dispatch => {
   dispatch({ type: CREATE_PLANT_START });
 
@@ -38,5 +42,37 @@ export const createPlant = plant => async dispatch => {
       }
 
       dispatch({ type: CREATE_PLANT_FAILURE, payload: { message } });
+    });
+};
+
+export const updatePlant = (id, plant) => async dispatch => {
+  dispatch({ type: UPDATE_PLANT_START });
+  console.log("I CONSOLE LOGGED HERE ", id);
+
+  return axiosAuth()
+    .post(`${BASE_URL}/plants/${id}`, plant)
+    .then(() => {
+      dispatch({ type: UPDATE_PLANT_SUCCESS });
+    })
+    .catch(err => {
+      let message;
+      if (err.response) {
+        switch (err.response.status) {
+          case 401:
+            message = "Not authorized";
+            break;
+          case 404:
+            message = "No plant found with that id";
+            break;
+          default:
+            message = "Something unexpected happened. Try again";
+        }
+      }
+
+      if (!message) {
+        message = "Something unexpected happened. Try again";
+      }
+
+      dispatch({ type: UPDATE_PLANT_FAILURE, payload: { message } });
     });
 };

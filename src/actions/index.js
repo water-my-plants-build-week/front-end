@@ -21,7 +21,11 @@ import {
   CREATE_PLANT_START,
   CREATE_PLANT_SUCCESS,
   CREATE_PLANT_FAILURE,
-  createPlant
+  createPlant,
+  UPDATE_PLANT_START,
+  UPDATE_PLANT_SUCCESS,
+  UPDATE_PLANT_FAILURE,
+  updatePlant
 } from "./plants";
 
 export const BASE_URL = "https://water-my-plants-lambda.herokuapp.com/api";
@@ -59,5 +63,9 @@ export {
   CREATE_PLANT_FAILURE,
   CREATE_PLANT_SUCCESS,
   createPlant,
-  getPlants
+  getPlants,
+  UPDATE_PLANT_START,
+  UPDATE_PLANT_SUCCESS,
+  UPDATE_PLANT_FAILURE,
+  updatePlant
 };
