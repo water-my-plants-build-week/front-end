@@ -2,7 +2,14 @@ import React from "react";
 import { connect } from "react-redux";
 import * as Yup from "yup";
 import { Formik } from "formik";
-import { FormCard, Form, Input, FormError } from "./form-components";
+import {
+  FormCard,
+  Form,
+  Input,
+  FormError,
+  FormTitle,
+  Button
+} from "./form-components";
 
 import { createPlant, getPlants } from "../actions";
 
@@ -28,7 +35,7 @@ class Plant extends React.Component {
         }}
         validationSchema={PlantSchema}
         onSubmit={values => {
-          this.props.onSubmit(values)
+          this.props.onSubmit(values);
         }}
       >
         {({
@@ -43,7 +50,7 @@ class Plant extends React.Component {
           <FormCard>
             <Form onSubmit={handleSubmit}>
               <nav>
-                <h1>Add a Plant</h1>
+                <FormTitle>{this.props.formTitle}</FormTitle>
               </nav>
 
               <Input
@@ -74,9 +81,9 @@ class Plant extends React.Component {
                 name={"dailyWaterTime"}
               />
 
-              <button disabled={isSubmitting} type="submit">
+              <Button disabled={isSubmitting} type="submit">
                 {this.props.submitText}
-              </button>
+              </Button>
             </Form>
           </FormCard>
         )}

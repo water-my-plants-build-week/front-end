@@ -78,6 +78,7 @@ class PlantsPage extends React.Component {
                 <p>Fetching your plants</p>
               ) : plant ? (
                 <PlantsForm
+                  formTitle="Edit Plant"
                   submitText="Update Plant"
                   onSubmit={values =>
                     this.props
@@ -111,6 +112,7 @@ class PlantsPage extends React.Component {
             path={`${this.props.match.path}/new/`}
             render={props => (
               <PlantsForm
+                formTitle="Create Plant"
                 submitText="Add Plant"
                 onSubmit={values =>
                   this.props
