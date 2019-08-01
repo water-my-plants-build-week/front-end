@@ -5,13 +5,18 @@ export const REMINDER_REQUEST_START = "REMINDER_REQUEST_START";
 export const REMINDER_REQUEST_SUCCESS = "REMINDER_REQUEST_SUCCESS";
 export const REMINDER_REQUEST_FAILURE = "REMINDER_REQUEST_FAILURE";
 
+export const REMINDER_DELETE_SUCCESS = "REMINDER_DELETE_SUCCESS";
+export const REMINDER_CREATE_SUCCESS = "REMINDER_CREATE_SUCCESS";
+export const REMINDER_UPDATE_SUCCESS = "REMINDER_UPDATE_SUCCESS";
+
 export const createReminder = reminder => async dispatch => {
   dispatch({ type: REMINDER_REQUEST_START });
 
   return axiosAuth()
     .post(`${BASE_URL}/twilio`, reminder)
-    .then(() => {
+    .then(res => {
       dispatch({ type: REMINDER_REQUEST_SUCCESS });
+      dispatch({ type: REMINDER_CREATE_SUCCESS, payload: res.data });
     })
     .catch(err => {
       let message;
@@ -39,12 +44,18 @@ export const createReminder = reminder => async dispatch => {
       dispatch({ type: REMINDER_REQUEST_FAILURE, payload: { message } });
     });
 };
+
+/*
+ * We weren't successful in getting a non 500 error from the server when
+ * attempting to update a reminder.
+ * */
 export const updateReminder = (id, reminderUpdate) => async dispatch => {
   dispatch({ type: REMINDER_REQUEST_START });
   return axiosAuth()
     .put(`${BASE_URL}/twilio/${id}`, reminderUpdate)
-    .then(() => {
+    .then(res => {
       dispatch({ type: REMINDER_REQUEST_SUCCESS });
+      dispatch({ type: REMINDER_UPDATE_SUCCESS, payload: res.data });
     })
     .catch(err => {
       let message;
@@ -72,6 +83,7 @@ export const updateReminder = (id, reminderUpdate) => async dispatch => {
       dispatch({ type: REMINDER_REQUEST_FAILURE, payload: { message } });
     });
 };
+
 export const deleteReminder = id => async dispatch => {
   dispatch({ type: REMINDER_REQUEST_START });
 
@@ -79,6 +91,7 @@ export const deleteReminder = id => async dispatch => {
     .delete(`${BASE_URL}/twilio/${id}`)
     .then(() => {
       dispatch({ type: REMINDER_REQUEST_SUCCESS });
+      dispatch({ type: REMINDER_DELETE_SUCCESS, payload: id });
     })
     .catch(err => {
       let message;
