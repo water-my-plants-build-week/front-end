@@ -1,21 +1,29 @@
 import React from "react";
+import { format } from "date-fns";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 
-import { deletePlant, getPlants } from "../../actions";
+import {
+  deletePlant,
+  getPlants,
+  deleteReminder,
+  getReminders
+} from "../../actions";
 
 // TODO:
 // Add ability to delete reminder
 // Move functionality to delete a plant up into this page
 
 function PlantDetail({
-  plantName,
-  dailyWaterTime,
+  plant,
   match,
   deletePlant,
+  deleteReminder,
+  getReminders,
   getPlants,
   history,
-  reminders
+  reminders,
+  isLoading
 }) {
   // TODO:
   // Implement ability to edit, and delete plant,
@@ -34,10 +42,32 @@ function PlantDetail({
     }
   };
 
+  const handleDeleteReminder = async id => {
+    try {
+      await deleteReminder(id);
+      await getReminders();
+    } catch (e) {
+      if (process.env.NODE_ENV !== "production") {
+        console.error(e.message);
+      }
+    }
+  };
+
+  // TODO: DELETE ME
+  console.log(isLoading);
+
+  if (isLoading) {
+    return <p>Fetching some info on your plants</p>;
+  }
+
+  if (!plant) {
+    return <p>No plant with that id found</p>;
+  }
+
   return (
     <>
-      <p>{plantName}</p>
-      <p>{dailyWaterTime}</p>
+      <p>{plant.plantName}</p>
+      <p>{plant.dailyWaterTime}</p>
       <p>Reminders</p>
 
       {/* TODO: Extract into reminders list component */}
@@ -48,8 +78,12 @@ function PlantDetail({
         reminders.map(reminder => (
           <React.Fragment key={reminder._id}>
             <p>
-              Remember to water {plantName} at {reminder.time}
+              Remember to water {plant.plantName} on{" "}
+              {format(reminder.time, "MMMM Do, YYYY")}
             </p>
+            <button onClick={() => handleDeleteReminder(reminder._id)}>
+              Delete Reminder
+            </button>
           </React.Fragment>
         ))
       )}
@@ -94,5 +128,5 @@ const mapStateToProps = (state, ownProps) => {
 
 export default connect(
   mapStateToProps,
-  { deletePlant, getPlants }
+  { deletePlant, getPlants, deleteReminder, getReminders }
 )(PlantDetail);
