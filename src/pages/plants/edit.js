@@ -17,13 +17,10 @@ function EditPlant({ plant, isLoading, updatePlant, history }) {
   const handleSubmit = async values => {
     try {
       await updatePlant(plant.id, values);
-
-      // TODO:
-      // Should we redirect back to /plants or /plants/:id ?
       history.push("/plants");
     } catch (e) {
       if (process.env.NODE_ENV !== "production") {
-        console.error(e);
+        console.error(e.message);
       }
     }
   };

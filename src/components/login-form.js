@@ -44,17 +44,17 @@ function LoginForm({ login, errorMessage, history }) {
         password: ""
       }}
       validationSchema={LoginSchema}
-      onSubmit={values => {
-        const { username, password } = values;
-        login(username, password)
-          .then(() => {
-            history.push("/plants");
-          })
-          .catch(err => {
-            if (process.env.NODE_ENV !== "production") {
-              console.error(err);
-            }
-          });
+      onSubmit={async (values, formikHelpers) => {
+        try {
+          const { username, password } = values;
+          await login(username, password);
+          history.push("/plants");
+        } catch (e) {
+          if (process.env.NODE_ENV !== "production") {
+            console.error(e.message);
+          }
+          formikHelpers.setSubmitting(false);
+        }
       }}
     >
       {({

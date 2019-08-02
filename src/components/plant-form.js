@@ -18,8 +18,8 @@ const PlantSchema = Yup.object().shape({
   plantName: Yup.string().required("Plant name is required"),
   dailyWaterTime: Yup.string()
     .matches(
-      /^([0-1]\d|[1-9]):[0-6]\d ?(am|pm)$/i,
-      "Required Time Format - HR:MM and either am or pm"
+      /^(([0-1][0-9]|2[0-3])(:([0-5][0-9])){2})$/i,
+      "Required Time Format - HH:MM:SS in 24 hour format"
     )
     .required("Watering time is required")
 });
