@@ -21,6 +21,9 @@ function Navigation({ history }) {
             Log out
           </button>
         </li>
+        <li>
+          <Link to="/edit">User Settings</Link>
+        </li>
       </ul>
     </nav>
   ) : null;
