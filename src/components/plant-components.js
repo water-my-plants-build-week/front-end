@@ -11,11 +11,20 @@ export const Ul = styled.ul`
 `;
 
 export const Li = styled.li`
-  background-color: #4cc2be;
-  border-radius: 10px;
-  padding: 0.7rem 1.25rem;
-  margin-bottom: 1.5rem;
-  box-shadow: 6px 4px 4px rgba(0, 0, 0, 0.15);
+  padding: 1rem 2rem;
+  background-color: #295573;
+  border-radius: 5px;
+  box-shadow: 4px 4px 2px rgba(0, 0, 0, 0.15);
+  margin-bottom: 2rem;
+  color: #fef6ac;
+  font-size: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  &:hover {
+    box-shadow: 8px 8px 6px rgba(0, 0, 0, 0.3);
+  }
 `;
 
 export const Link = styled(UglyLink)`
@@ -26,13 +35,22 @@ export const Link = styled(UglyLink)`
 `;
 
 export const Button = styled(UglyLink)`
-  background-color: #80bd0c;
-  padding: 0.5rem 2rem;
+  font-family: sans-serif;
+  background-color: #6fd41f;
   border-radius: 5px;
+  box-shadow: 2px 6px 6px rgba(0, 0, 0, 0.15);
   color: white;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  font-weight: 600;
+  font-size: 18px;
+  padding: 1rem 2rem;
+  border: none;
+  cursor: pointer;
   text-decoration: none;
-  font-size: 14px;
+  margin: 1.5rem 0;
+
   &:hover {
-    box-shadow: 6px 4px 4px rgba(0, 0, 0, 0.2);
+    box-shadow: 4px 8px 8px rgba(0, 0, 0, 0.15);
   }
 `;

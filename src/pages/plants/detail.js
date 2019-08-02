@@ -39,25 +39,61 @@ const Button = styled.button`
   padding: 1rem 2rem;
   border-radius: 5px;
   border: none;
-  background-color: #45b3bb;
+  background-color: #4cc2be;
   color: white;
   font-size: 16px;
   text-transform: uppercase;
   font-family: sans-serif;
   text-decoration: none;
   cursor: pointer;
-  box-shadow: 4px 2px 2px rgba(0, 0, 0, 0.15);
+  box-shadow: 4px 4px 2px rgba(0, 0, 0, 0.15);
   margin: 0.5rem 2rem;
+  &:hover {
+    background-color: #45b3bb;
+    box-shadow: 6px 6px 4px rgba(0, 0, 0, 0.15);
+  }
 `;
 
 const DeleteBtn = styled(Button)`
   background-color: #f49092;
   &:hover {
+    box-shadow: 6px 6px 4px rgba(0, 0, 0, 0.15);
     background-color: #df6467;
   }
 `;
 
-const H3 = styled.h3``;
+const Flex = styled.div`
+  display: flex;
+  justify-content: space-around;
+
+  @media (max-width: 800px) {
+    flex-direction: column;
+    align-items: center;
+  }
+`;
+
+const Detail = styled.h3`
+  font-size: ${props => {
+    switch (props.size) {
+      case "LG":
+        return "38px";
+      default:
+        return "24px";
+    }
+  }};
+  padding: 0.25rem 0;
+  margin-bottom: 0.5rem;
+  color: ${props => (props.color ? props.color : "#556867")};
+`;
+
+const Hr = styled.div`
+  max-width: 800px;
+  width: 90%;
+  background-color: #556867;
+  height: 3px;
+  border-radius: 1px;
+  margin: 1rem auto 2rem auto;
+`;
 
 function PlantDetail({
   plant,
@@ -99,10 +135,14 @@ function PlantDetail({
 
   return (
     <>
-      <h3>{plant.plantName}</h3>
-      <h4>{plant.dailyWaterTime}</h4>
       <br />
-      <h3>Reminders</h3>
+      <Detail size="LG" color="#312d2a">
+        {plant.plantName}
+      </Detail>
+      <Detail>Daily Watering Time {plant.dailyWaterTime}</Detail>
+      <br />
+      <Hr />
+      <Detail>Reminders</Detail>
 
       {reminders.length === 0 ? (
         <p>No Reminders</p>
@@ -123,13 +163,15 @@ function PlantDetail({
         </Ul>
       )}
 
-      <Button as={Link} to={`/plants/${match.params.id}/reminder/new`}>
-        Add reminder
-      </Button>
-      <Button as={Link} to={`/plants/${match.params.id}/edit`}>
-        Edit
-      </Button>
-      <DeleteBtn onClick={handleDeletePlant}>Delete Plant</DeleteBtn>
+      <Flex>
+        <Button as={Link} to={`/plants/${match.params.id}/reminder/new`}>
+          Add Reminder
+        </Button>
+        <Button as={Link} to={`/plants/${match.params.id}/edit`}>
+          Edit Plant
+        </Button>
+        <DeleteBtn onClick={handleDeletePlant}>Delete Plant</DeleteBtn>
+      </Flex>
     </>
   );
 }
