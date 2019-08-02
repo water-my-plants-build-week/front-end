@@ -1,9 +1,99 @@
 import React from "react";
+import styled from "styled-components";
+import { FaTrashAlt } from "react-icons/fa";
 import { format } from "date-fns";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 
 import { deletePlant, deleteReminder } from "../../actions";
+
+const Card = styled.li`
+  padding: 1rem 2rem;
+  background-color: #295573;
+  border-radius: 5px;
+  box-shadow: 4px 4px 2px rgba(0, 0, 0, 0.15);
+  margin-bottom: 2rem;
+  color: #fef6ac;
+  font-size: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const Ul = styled.ul`
+  max-width: 600px;
+  width: 90%;
+  margin: 1rem auto;
+`;
+
+const TrashButton = styled(FaTrashAlt)`
+  color: #f49092;
+  cursor: pointer;
+  font-size: 20px;
+  &:hover {
+    color: #df6467;
+  }
+`;
+
+const Button = styled.button`
+  padding: 1rem 2rem;
+  border-radius: 5px;
+  border: none;
+  background-color: #4cc2be;
+  color: white;
+  font-size: 16px;
+  text-transform: uppercase;
+  font-family: sans-serif;
+  text-decoration: none;
+  cursor: pointer;
+  box-shadow: 4px 4px 2px rgba(0, 0, 0, 0.15);
+  margin: 0.5rem 2rem;
+  &:hover {
+    background-color: #45b3bb;
+    box-shadow: 6px 6px 4px rgba(0, 0, 0, 0.15);
+  }
+`;
+
+const DeleteBtn = styled(Button)`
+  background-color: #f49092;
+  &:hover {
+    box-shadow: 6px 6px 4px rgba(0, 0, 0, 0.15);
+    background-color: #df6467;
+  }
+`;
+
+const Flex = styled.div`
+  display: flex;
+  justify-content: space-around;
+
+  @media (max-width: 800px) {
+    flex-direction: column;
+    align-items: center;
+  }
+`;
+
+const Detail = styled.h3`
+  font-size: ${props => {
+    switch (props.size) {
+      case "LG":
+        return "38px";
+      default:
+        return "24px";
+    }
+  }};
+  padding: 0.25rem 0;
+  margin-bottom: 0.5rem;
+  color: ${props => (props.color ? props.color : "#556867")};
+`;
+
+const Hr = styled.div`
+  max-width: 800px;
+  width: 90%;
+  background-color: #556867;
+  height: 3px;
+  border-radius: 1px;
+  margin: 1rem auto 2rem auto;
+`;
 
 function PlantDetail({
   plant,
@@ -14,11 +104,6 @@ function PlantDetail({
   reminders,
   isLoading
 }) {
-  // TODO:
-  // Implement ability to edit, and delete plant,
-  // as well as viewing reminders for the plant,
-  // and creating a new reminder
-
   const handleDeletePlant = async () => {
     try {
       await deletePlant(match.params.id);
@@ -40,9 +125,6 @@ function PlantDetail({
     }
   };
 
-  // TODO: DELETE ME
-  console.log(isLoading);
-
   if (isLoading) {
     return <p>Fetching some info on your plants</p>;
   }
@@ -53,31 +135,43 @@ function PlantDetail({
 
   return (
     <>
-      <p>{plant.plantName}</p>
-      <p>{plant.dailyWaterTime}</p>
-      <p>Reminders</p>
-
-      {/* TODO: Extract into reminders list component */}
+      <br />
+      <Detail size="LG" color="#312d2a">
+        {plant.plantName}
+      </Detail>
+      <Detail>Daily Watering Time {plant.dailyWaterTime}</Detail>
+      <br />
+      <Hr />
+      <Detail>Reminders</Detail>
 
       {reminders.length === 0 ? (
         <p>No Reminders</p>
       ) : (
-        reminders.map(reminder => (
-          <React.Fragment key={reminder._id}>
-            <p>
-              Remember to water {plant.plantName} on{" "}
-              {format(reminder.time, "MMMM Do, YYYY")}
-            </p>
-            <button onClick={() => handleDeleteReminder(reminder._id)}>
-              Delete Reminder
-            </button>
-          </React.Fragment>
-        ))
+        <Ul>
+          {reminders.map(reminder => (
+            <Card key={reminder._id}>
+              <p>
+                Remember to water {plant.plantName} on{" "}
+                {format(reminder.time, "MMMM Do, YYYY")}
+              </p>
+              <TrashButton
+                aria-label="Delete reminder"
+                onClick={() => handleDeleteReminder(reminder._id)}
+              />
+            </Card>
+          ))}
+        </Ul>
       )}
 
-      <Link to={`/plants/${match.params.id}/reminder/new`}>Add reminder</Link>
-      <Link to={`/plants/${match.params.id}/edit`}>Edit</Link>
-      <button onClick={handleDeletePlant}>Delete Plant</button>
+      <Flex>
+        <Button as={Link} to={`/plants/${match.params.id}/reminder/new`}>
+          Add Reminder
+        </Button>
+        <Button as={Link} to={`/plants/${match.params.id}/edit`}>
+          Edit Plant
+        </Button>
+        <DeleteBtn onClick={handleDeletePlant}>Delete Plant</DeleteBtn>
+      </Flex>
     </>
   );
 }

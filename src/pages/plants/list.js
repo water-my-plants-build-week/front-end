@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
+
+import { Ul, Li, Link, Button } from "../../components/plant-components";
 
 function PlantsList({ plants, isLoading }) {
   // TODO: Implement a better loading indicator
@@ -21,17 +22,17 @@ function PlantsList({ plants, isLoading }) {
 
   return (
     <>
-      <ul>
+      <Ul>
         {plants.map((plant, index) => (
-          <li key={index}>
+          <Li key={index}>
             <Link to={`/plants/${plant.id}`}>
               <p>Plant: {plant.plantName}</p>
               <p>Water Time: {plant.dailyWaterTime} </p>
             </Link>
-          </li>
+          </Li>
         ))}
-      </ul>
-      <Link to="/plants/new/">Add a plant</Link>
+      </Ul>
+      <Button to="/plants/new/">Add a plant</Button>
     </>
   );
 }

@@ -28,7 +28,7 @@ const FormCard = styled.div`
   align-items: center;
   width: 100%;
   max-width: 800px;
-  margin: 0 auto;
+  margin: 3rem auto;
   box-shadow: 2px 6px 6px rgba(0, 0, 0, 0.15);
 `;
 
