@@ -17,10 +17,8 @@ import { editUser } from "../actions";
 const UserSchema = Yup.object().shape({
   username: Yup.string().required("Username is required"),
   phoneNumber: Yup.string()
-    .matches(
-      /(\d{10}|\d{3}( |-)\d{3}( |-)\d{4})/,
-      "Phone numbers should only contain digits"
-    )
+    .length(10, "Please enter a valid phone number with 10 digits")
+    .matches(/\d{10}/, "Phone numbers should only contain digits")
     .required("Please enter a phone number")
 });
 

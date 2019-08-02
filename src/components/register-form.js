@@ -26,7 +26,6 @@ const P = styled.p`
 const RegisterSchema = Yup.object().shape({
   username: Yup.string()
     .min(5, "Please make your username at least five characters in length")
-    // .matches(/^((?![\w]+).)*$/, "Username should not contain spaces")
     .required("Enter a username"),
   password: Yup.string()
     .min(5, "Please make your password at least five characters in length")
@@ -48,24 +47,18 @@ function RegisterForm({ registerUser, login, errorMessage, history }) {
         timezone: ""
       }}
       validationSchema={RegisterSchema}
-      onSubmit={values => {
-        registerUser(values)
-          .then(() => {
-            login(values.username, values.password)
-              .then(() => {
-                history.push("/plants");
-              })
-              .catch(err => {
-                if (process.env.NODE_ENV !== "production") {
-                  console.error(err);
-                }
-              });
-          })
-          .catch(err => {
-            if (process.env.NODE_ENV !== "production") {
-              console.error(err);
-            }
-          });
+      onSubmit={async (values, formikHelpers) => {
+        try {
+          const { username, password } = values;
+          await registerUser(values);
+          await login(username, password);
+          history.push("/plants");
+        } catch (e) {
+          if (process.env.NODE_ENV !== "production") {
+            console.error(e.message);
+          }
+          formikHelpers.setSubmitting(false);
+        }
       }}
     >
       {({
