@@ -9,15 +9,21 @@ import {
   REMINDER_DELETE_SUCCESS,
   PLANT_CREATE_SUCCESS,
   PLANT_UPDATE_SUCCESS,
-  PLANT_DELETE_SUCCESS
+  PLANT_DELETE_SUCCESS,
+  UPDATE_USER_START,
+  UPDATE_USER_SUCCESS,
+  UPDATE_USER_FAILURE,
+  LOGIN_SUCCESS
 } from "../actions";
 
 const initialState = {
   plants: [],
   reminders: [],
+  user: null,
   fetchingPlants: false,
   fetchingReminders: false,
-  errorMessage: null
+  errorMessage: null,
+  isLoading: false
 };
 
 export default function user(state = initialState, action) {
@@ -98,6 +104,32 @@ export default function user(state = initialState, action) {
       return {
         ...state,
         plants: state.plants.filter(plant => plant.id !== action.payload)
+      };
+    }
+    case UPDATE_USER_START: {
+      return {
+        ...state,
+        isLoading: true
+      };
+    }
+    case UPDATE_USER_SUCCESS: {
+      return {
+        ...state,
+        isLoading: false,
+        user: action.payload.user
+      };
+    }
+    case UPDATE_USER_FAILURE: {
+      return {
+        ...state,
+        isLoading: false,
+        errorMessage: action.payload.message
+      };
+    }
+    case LOGIN_SUCCESS: {
+      return {
+        ...state,
+        user: action.payload.user
       };
     }
     default:

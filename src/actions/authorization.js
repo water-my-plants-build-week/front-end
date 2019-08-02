@@ -74,23 +74,6 @@ export const login = (username, password) => async dispatch => {
   return axios
     .post(`${BASE_URL}/auth/login`, { username, password })
     .then(res => {
-      /*
-       * On a 200 the server returns an object with the shape:
-       *
-       * {
-       *   user: {
-       *     id: number,
-       *     username: string,
-       *     password: string, (hashed)
-       *     phoneNumber: string || null,
-       *     timezone: string || null,
-       *     useTwilio: boolean, (defaults to 0?)
-       *     avatar_id: string || null,
-       *   },
-       *   token: string,
-       * }
-       **/
-
       dispatch({
         type: LOGIN_SUCCESS,
         payload: {

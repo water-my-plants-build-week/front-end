@@ -8,6 +8,7 @@ import Login from "./pages/login";
 import SignUp from "./pages/sign-up";
 import PlantsPage from "./pages/plants/";
 import Navigation from "./components/navigation";
+import EditUser from "./components/edit-user";
 
 // TODO: Extract into it's own function
 function NoRoute() {
@@ -23,6 +24,7 @@ function App() {
         <Route path="/login" component={Login} />
         <Route path="/sign-up" component={SignUp} />
         <PrivateRoute path="/plants" component={PlantsPage} />
+        <PrivateRoute path="/edit" component={EditUser} />
         <PrivateRoute component={NoRoute} />
       </Switch>
     </div>
