@@ -4,6 +4,7 @@ import { FaTrashAlt } from "react-icons/fa";
 import { format } from "date-fns";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
+import { BeatLoader } from "react-spinners";
 
 import { deletePlant, deleteReminder } from "../../actions";
 
@@ -65,6 +66,9 @@ const DeleteBtn = styled(Button)`
 const Flex = styled.div`
   display: flex;
   justify-content: space-around;
+  max-width: 1000px;
+  width: 90%;
+  margin: 0.5rem auto;
 
   @media (max-width: 800px) {
     flex-direction: column;
@@ -126,7 +130,12 @@ function PlantDetail({
   };
 
   if (isLoading) {
-    return <p>Fetching some info on your plants</p>;
+    return (
+      <>
+        <p>Fetching some info on your plants</p>
+        <BeatLoader />
+      </>
+    );
   }
 
   if (!plant) {

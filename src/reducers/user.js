@@ -103,7 +103,9 @@ export default function user(state = initialState, action) {
     case PLANT_DELETE_SUCCESS: {
       return {
         ...state,
-        plants: state.plants.filter(plant => plant.id !== action.payload)
+        plants: state.plants.filter(
+          plant => plant.id !== Number(action.payload)
+        )
       };
     }
     case UPDATE_USER_START: {

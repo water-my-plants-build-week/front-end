@@ -18,7 +18,12 @@ export default function ReminderForm({ formTitle, submitText, onSubmit }) {
       <FormTitle>{formTitle}</FormTitle>
       <Form onSubmit={handleSubmit}>
         <Label htmlFor="date">Pick a date for the reminder</Label>
-        <DatePicker id="date" name="date" selected={date} onChange={setDate} />
+        <DatePicker
+          id="date"
+          name="date"
+          selected={date}
+          onChange={date => setDate(date)}
+        />
         <Button type="submit">{submitText}</Button>
       </Form>
     </FormCard>
