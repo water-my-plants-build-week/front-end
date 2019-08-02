@@ -1,9 +1,63 @@
 import React from "react";
+import styled from "styled-components";
+import { FaTrashAlt } from "react-icons/fa";
 import { format } from "date-fns";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 
 import { deletePlant, deleteReminder } from "../../actions";
+
+const Card = styled.li`
+  padding: 1rem 2rem;
+  background-color: #295573;
+  border-radius: 5px;
+  box-shadow: 4px 4px 2px rgba(0, 0, 0, 0.15);
+  margin-bottom: 2rem;
+  color: #fef6ac;
+  font-size: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const Ul = styled.ul`
+  max-width: 600px;
+  width: 90%;
+  margin: 1rem auto;
+`;
+
+const TrashButton = styled(FaTrashAlt)`
+  color: #f49092;
+  cursor: pointer;
+  font-size: 20px;
+  &:hover {
+    color: #df6467;
+  }
+`;
+
+const Button = styled.button`
+  padding: 1rem 2rem;
+  border-radius: 5px;
+  border: none;
+  background-color: #45b3bb;
+  color: white;
+  font-size: 16px;
+  text-transform: uppercase;
+  font-family: sans-serif;
+  text-decoration: none;
+  cursor: pointer;
+  box-shadow: 4px 2px 2px rgba(0, 0, 0, 0.15);
+  margin: 0.5rem 2rem;
+`;
+
+const DeleteBtn = styled(Button)`
+  background-color: #f49092;
+  &:hover {
+    background-color: #df6467;
+  }
+`;
+
+const H3 = styled.h3``;
 
 function PlantDetail({
   plant,
@@ -14,11 +68,6 @@ function PlantDetail({
   reminders,
   isLoading
 }) {
-  // TODO:
-  // Implement ability to edit, and delete plant,
-  // as well as viewing reminders for the plant,
-  // and creating a new reminder
-
   const handleDeletePlant = async () => {
     try {
       await deletePlant(match.params.id);
@@ -40,9 +89,6 @@ function PlantDetail({
     }
   };
 
-  // TODO: DELETE ME
-  console.log(isLoading);
-
   if (isLoading) {
     return <p>Fetching some info on your plants</p>;
   }
@@ -53,31 +99,37 @@ function PlantDetail({
 
   return (
     <>
-      <p>{plant.plantName}</p>
-      <p>{plant.dailyWaterTime}</p>
-      <p>Reminders</p>
-
-      {/* TODO: Extract into reminders list component */}
+      <h3>{plant.plantName}</h3>
+      <h4>{plant.dailyWaterTime}</h4>
+      <br />
+      <h3>Reminders</h3>
 
       {reminders.length === 0 ? (
         <p>No Reminders</p>
       ) : (
-        reminders.map(reminder => (
-          <React.Fragment key={reminder._id}>
-            <p>
-              Remember to water {plant.plantName} on{" "}
-              {format(reminder.time, "MMMM Do, YYYY")}
-            </p>
-            <button onClick={() => handleDeleteReminder(reminder._id)}>
-              Delete Reminder
-            </button>
-          </React.Fragment>
-        ))
+        <Ul>
+          {reminders.map(reminder => (
+            <Card key={reminder._id}>
+              <p>
+                Remember to water {plant.plantName} on{" "}
+                {format(reminder.time, "MMMM Do, YYYY")}
+              </p>
+              <TrashButton
+                aria-label="Delete reminder"
+                onClick={() => handleDeleteReminder(reminder._id)}
+              />
+            </Card>
+          ))}
+        </Ul>
       )}
 
-      <Link to={`/plants/${match.params.id}/reminder/new`}>Add reminder</Link>
-      <Link to={`/plants/${match.params.id}/edit`}>Edit</Link>
-      <button onClick={handleDeletePlant}>Delete Plant</button>
+      <Button as={Link} to={`/plants/${match.params.id}/reminder/new`}>
+        Add reminder
+      </Button>
+      <Button as={Link} to={`/plants/${match.params.id}/edit`}>
+        Edit
+      </Button>
+      <DeleteBtn onClick={handleDeletePlant}>Delete Plant</DeleteBtn>
     </>
   );
 }
