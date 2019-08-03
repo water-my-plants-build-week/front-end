@@ -3,6 +3,7 @@ import styled from "styled-components";
 import * as Yup from "yup";
 import { Formik } from "formik";
 import { connect } from "react-redux";
+import { BeatLoader } from "react-spinners";
 import { Link, withRouter } from "react-router-dom";
 import { login } from "../actions";
 
@@ -36,7 +37,7 @@ const LoginSchema = Yup.object().shape({
  *
  * */
 
-function LoginForm({ login, errorMessage, history }) {
+function LoginForm({ login, errorMessage, history, isLoading }) {
   return (
     <Formik
       initialValues={{
@@ -102,11 +103,11 @@ function LoginForm({ login, errorMessage, history }) {
               />
               <FormError touched={touched.password} error={errors.password} />
 
-              {/* 
-              
-                TODO: Add some sort of loading indication for the user so that they know the form is submitting
-              
-                  */}
+              {isLoading ? (
+                <>
+                  <P>Logging in...</P> <BeatLoader />
+                </>
+              ) : null}
               <Button disabled={isSubmitting} type="submit">
                 Login
               </Button>

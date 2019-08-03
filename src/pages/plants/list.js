@@ -5,38 +5,40 @@ import { BeatLoader } from "react-spinners";
 
 import { Ul, Li, Link, Button } from "../../components/plant-components";
 
+import { colors, sizes, easeInOut, shadow } from "../../styles";
+
 const Header = styled.h3`
   font-size: ${props => {
     switch (props.size) {
       case "LG":
-        return "38px";
+        return sizes["12"];
       default:
-        return "24px";
+        return sizes["6"];
     }
   }};
-  padding: 0.25rem 0;
-  margin-top: 2rem;
-  margin-bottom: 0.5rem;
-  color: ${props => (props.color ? props.color : "#556867")};
+  padding: ${sizes["1"]} 0;
+  margin-top: ${sizes[4]};
+  margin-bottom: ${sizes[2]};
+  color: ${props => (props.color ? props.color : colors.brown)};
 `;
 
 const StyledLink = styled(Link)`
-  padding: 1rem 2rem;
-  border-radius: 5px;
+  padding: ${sizes[4]} ${sizes[8]};
+  border-radius: ${sizes[1]};
   border: none;
-  background-color: #4cc2be;
+  background-color: ${colors.teal};
   color: white;
-  font-size: 16px;
+  font-size: ${sizes[4]};
   text-transform: uppercase;
   font-family: sans-serif;
   text-decoration: none;
   cursor: pointer;
-  box-shadow: 4px 4px 2px rgba(0, 0, 0, 0.15);
   margin: 0.5rem auto;
   max-width: 200px;
+  ${easeInOut};
+  ${shadow};
   &:hover {
-    background-color: #45b3bb;
-    box-shadow: 6px 6px 4px rgba(0, 0, 0, 0.15);
+    background-color: ${colors.dark.teal};
   }
 `;
 
@@ -45,7 +47,7 @@ const Flex = styled.div`
   flex-direction: column;
   max-width: 900px;
   width: 90%;
-  margin: 2rem auto;
+  margin: ${sizes[8]} auto;
 `;
 
 function PlantsList({ plants, isLoading }) {
@@ -71,6 +73,7 @@ function PlantsList({ plants, isLoading }) {
 
   return (
     <>
+      <Header>Your Greenhouse</Header>
       <Ul>
         {plants.map((plant, index) => (
           <Li key={index}>
