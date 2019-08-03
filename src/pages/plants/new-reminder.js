@@ -3,11 +3,11 @@ import { connect } from "react-redux";
 import ReminderForm from "../../components/reminder-form";
 import ResourceNotFound from "../../components/resource-not-found";
 import { createReminder } from "../../actions";
+import { BeatLoader } from "react-spinners";
 
 function NewReminder({ plant, createReminder, isLoading, history }) {
   if (isLoading) {
-    // TODO: Swap for loading component
-    return <p>Loading...</p>;
+    return <BeatLoader />;
   }
 
   if (!plant) {

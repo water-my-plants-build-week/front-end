@@ -17,7 +17,6 @@ import {
   FormError
 } from "./form-components";
 
-// TODO: Remove duplicated styles
 const P = styled.p`
   color white;
   font-size: 18px;

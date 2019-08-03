@@ -16,12 +16,12 @@ import {
   Input,
   Label
 } from "./form-components";
+import { sizes } from "../styles";
 
-// TODO: Remove duplicated styles
 const P = styled.p`
   color white;
-  font-size: 18px;
-  margin: 1rem 0;
+  font-size: ${sizes[5]};
+  margin: ${sizes[4]} 0;
 `;
 
 const LoginSchema = Yup.object().shape({

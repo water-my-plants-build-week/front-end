@@ -10,7 +10,6 @@ import PlantsPage from "./pages/plants/";
 import Navigation from "./components/navigation";
 import EditUser from "./components/edit-user";
 
-// TODO: Extract into it's own function
 function NoRoute() {
   return <Redirect to="/plants" />;
 }

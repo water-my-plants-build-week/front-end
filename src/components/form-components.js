@@ -1,35 +1,37 @@
 import React from "react";
 import styled from "styled-components";
 
+import { colors, sizes, shadow, easeInOut } from "../styles";
+
 const Input = styled.input`
-  background-color: #99e7e8;
-  border: 1px solid #40a9b0;
-  border-radius: 5px;
+  background-color: ${colors.lightBlue};
+  border: 1px solid ${colors.borders.lightBlue};
+  border-radius: ${sizes[1]};
   color: white;
   width: 100%;
-  padding: 0.7rem;
-  font-size: 16px;
-  margin-bottom: 1.2rem;
+  padding: ${sizes[3]};
+  font-size: ${sizes[4]};
+  margin-bottom: ${sizes[5]};
 `;
 
 const Label = styled.label`
-  color: #efefed;
+  color: ${colors.white};
   text-transform: uppercase;
   letter-spacing: 2px;
   align-self: flex-start;
 `;
 
 const FormCard = styled.div`
-  border-radius: 10px;
-  background-color: #4ac4ae;
+  border-radius: ${sizes[2]};
+  background-color: ${colors.teal};
   display: flex;
   flex-direction: column;
-  padding: 2rem 4rem;
+  padding: ${sizes[8]} ${sizes[6]};
   align-items: center;
   width: 100%;
   max-width: 800px;
-  margin: 3rem auto;
-  box-shadow: 2px 6px 6px rgba(0, 0, 0, 0.15);
+  margin: ${sizes[12]} auto;
+  ${shadow};
 `;
 
 const Form = styled.form`
@@ -43,40 +45,42 @@ const FormTitle = styled.h2`
   color: white;
   text-transform: uppercase;
 
-  font-size: 24px;
+  font-size: ${sizes[6]};
   font-weight: 700;
-  margin-bottom: 1rem;
+  margin-bottom: ${sizes[4]};
 `;
 
 const Button = styled.button`
-  background-color: #6fd41f;
-  border-radius: 5px;
-  box-shadow: 2px 6px 6px rgba(0, 0, 0, 0.15);
+  background-color: ${colors.green};
+  border-radius: ${sizes[1]};
   color: white;
   text-transform: uppercase;
   letter-spacing: 3px;
   font-weight: 600;
-  font-size: 18px;
-  padding: 1rem 2rem;
+  font-size: ${sizes[5]};
+  padding: ${sizes[4]} ${sizes[8]};
   border: none;
   cursor: pointer;
   text-decoration: none;
-  margin: 1.5rem 0;
+  margin: ${sizes[6]} 0;
+  ${easeInOut};
+  ${shadow};
+`;
 
-  &:hover {
-    box-shadow: 4px 8px 8px rgba(0, 0, 0, 0.15);
-  }
+const FormErrorDetail = styled.p`
+  font-size: ${sizes[4]};
+  color: ${colors.dark.gold};
+  text-transform: uppercase;
+`;
+const PlaceHolder = styled.div`
+  height: ${sizes[4]};
 `;
 
 function FormError({ touched, error }) {
   return touched && error ? (
-    <p
-      style={{ fontSize: "16px", color: "#f5df80", textTransform: "uppercase" }}
-    >
-      {error}
-    </p>
+    <FormErrorDetail>{error}</FormErrorDetail>
   ) : (
-    <div style={{ height: "16px" }} />
+    <PlaceHolder />
   );
 }
 
