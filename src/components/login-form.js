@@ -3,6 +3,7 @@ import styled from "styled-components";
 import * as Yup from "yup";
 import { Formik } from "formik";
 import { connect } from "react-redux";
+import { BeatLoader } from "react-spinners";
 import { Link, withRouter } from "react-router-dom";
 import { login } from "../actions";
 
@@ -15,12 +16,12 @@ import {
   Input,
   Label
 } from "./form-components";
+import { sizes } from "../styles";
 
-// TODO: Remove duplicated styles
 const P = styled.p`
   color white;
-  font-size: 18px;
-  margin: 1rem 0;
+  font-size: ${sizes[5]};
+  margin: ${sizes[4]} 0;
 `;
 
 const LoginSchema = Yup.object().shape({
@@ -36,7 +37,7 @@ const LoginSchema = Yup.object().shape({
  *
  * */
 
-function LoginForm({ login, errorMessage, history }) {
+function LoginForm({ login, errorMessage, history, isLoading }) {
   return (
     <Formik
       initialValues={{
@@ -102,11 +103,11 @@ function LoginForm({ login, errorMessage, history }) {
               />
               <FormError touched={touched.password} error={errors.password} />
 
-              {/* 
-              
-                TODO: Add some sort of loading indication for the user so that they know the form is submitting
-              
-                  */}
+              {isLoading ? (
+                <>
+                  <P>Logging in...</P> <BeatLoader />
+                </>
+              ) : null}
               <Button disabled={isSubmitting} type="submit">
                 Login
               </Button>

@@ -4,6 +4,7 @@ import * as Yup from "yup";
 import { Formik } from "formik";
 import { connect } from "react-redux";
 import { Link, withRouter } from "react-router-dom";
+import { BeatLoader } from "react-spinners";
 import { registerUser, login } from "../actions";
 
 import {
@@ -16,7 +17,6 @@ import {
   FormError
 } from "./form-components";
 
-// TODO: Remove duplicated styles
 const P = styled.p`
   color white;
   font-size: 18px;
@@ -37,7 +37,13 @@ const RegisterSchema = Yup.object().shape({
   timezone: Yup.string().required("Enter a city")
 });
 
-function RegisterForm({ registerUser, login, errorMessage, history }) {
+function RegisterForm({
+  registerUser,
+  login,
+  errorMessage,
+  history,
+  isLoading
+}) {
   return (
     <Formik
       initialValues={{
@@ -126,11 +132,12 @@ function RegisterForm({ registerUser, login, errorMessage, history }) {
               />
               <FormError touched={touched.timezone} error={errors.timezone} />
 
-              {/* 
-              
-                TODO: Add some sort of loading indication for the user so that they know the form is submitting
-              
-                  */}
+              {isLoading ? (
+                <>
+                  <P>Registering...</P>
+                  <BeatLoader />
+                </>
+              ) : null}
 
               <Button disabled={isSubmitting} type="submit">
                 Sign up

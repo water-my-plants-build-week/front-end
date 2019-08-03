@@ -7,18 +7,20 @@ import { Link } from "react-router-dom";
 import { BeatLoader } from "react-spinners";
 
 import { deletePlant, deleteReminder } from "../../actions";
+import { colors, sizes, shadow, easeInOut } from "../../styles";
 
 const Card = styled.li`
-  padding: 1rem 2rem;
-  background-color: #295573;
-  border-radius: 5px;
-  box-shadow: 4px 4px 2px rgba(0, 0, 0, 0.15);
-  margin-bottom: 2rem;
-  color: #fef6ac;
-  font-size: 16px;
+  padding: ${sizes["4"]} ${sizes["8"]};
+  background-color: ${colors.blue};
+  border-radius: ${sizes["1"]};
+  margin-bottom: ${sizes["8"]};
+  color: ${colors.gold};
+  font-size: ${sizes["4"]};
   display: flex;
   justify-content: space-between;
   align-items: center;
+  ${easeInOut};
+  ${shadow};
 `;
 
 const Ul = styled.ul`
@@ -28,38 +30,40 @@ const Ul = styled.ul`
 `;
 
 const TrashButton = styled(FaTrashAlt)`
-  color: #f49092;
+  color: ${colors.red};
   cursor: pointer;
-  font-size: 20px;
+  font-size: ${sizes["4"]};
+  ${easeInOut};
   &:hover {
-    color: #df6467;
+    color: ${colors.dark.red};
   }
 `;
 
 const Button = styled.button`
-  padding: 1rem 2rem;
-  border-radius: 5px;
+  padding: ${sizes["4"]} ${sizes["8"]};
+  border-radius: ${sizes["1"]};
   border: none;
-  background-color: #4cc2be;
+  background-color: ${colors.teal};
   color: white;
-  font-size: 16px;
+  font-size: ${sizes["4"]};
   text-transform: uppercase;
   font-family: sans-serif;
   text-decoration: none;
   cursor: pointer;
-  box-shadow: 4px 4px 2px rgba(0, 0, 0, 0.15);
-  margin: 0.5rem 2rem;
+  margin: ${sizes["2"]} ${sizes["8"]};
+  ${easeInOut};
+  ${shadow};
   &:hover {
-    background-color: #45b3bb;
-    box-shadow: 6px 6px 4px rgba(0, 0, 0, 0.15);
+    background-color: ${colors.dark.teal};
   }
 `;
 
 const DeleteBtn = styled(Button)`
-  background-color: #f49092;
+  background-color: ${colors.red};
+  ${easeInOut};
+  ${shadow};
   &:hover {
-    box-shadow: 6px 6px 4px rgba(0, 0, 0, 0.15);
-    background-color: #df6467;
+    background-color: ${colors.dark.red};
   }
 `;
 
@@ -68,7 +72,7 @@ const Flex = styled.div`
   justify-content: space-around;
   max-width: 1000px;
   width: 90%;
-  margin: 0.5rem auto;
+  margin: ${sizes["2"]} auto;
 
   @media (max-width: 800px) {
     flex-direction: column;
@@ -80,23 +84,23 @@ const Detail = styled.h3`
   font-size: ${props => {
     switch (props.size) {
       case "LG":
-        return "38px";
+        return sizes["12"];
       default:
-        return "24px";
+        return sizes["6"];
     }
   }};
-  padding: 0.25rem 0;
-  margin-bottom: 0.5rem;
-  color: ${props => (props.color ? props.color : "#556867")};
+  padding: ${sizes["1"]} 0;
+  margin-bottom: ${sizes["2"]};
+  color: ${props => (props.color ? props.color : colors.brown)};
 `;
 
 const Hr = styled.div`
   max-width: 800px;
   width: 90%;
-  background-color: #556867;
+  background-color: ${colors.brown};
   height: 3px;
   border-radius: 1px;
-  margin: 1rem auto 2rem auto;
+  margin: ${sizes["4"]} auto ${sizes["8"]} auto;
 `;
 
 function PlantDetail({

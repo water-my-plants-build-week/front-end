@@ -3,7 +3,6 @@ import styled from "styled-components";
 
 import RegisterForm from "../components/register-form";
 
-// TODO: Remove duplication and export into styled sheets
 const PageTitle = styled.h1`
   color: #538aae;
   font-size: 42px;

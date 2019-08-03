@@ -3,11 +3,11 @@ import { connect } from "react-redux";
 import PlantForm from "../../components/plant-form";
 import ResourceNotFound from "../../components/resource-not-found";
 import { updatePlant } from "../../actions";
+import { BeatLoader } from "react-spinners";
 
 function EditPlant({ plant, isLoading, updatePlant, history }) {
-  // TODO: Swap out for actual loading component
   if (isLoading) {
-    return <p>Loading..</p>;
+    return <BeatLoader />;
   }
 
   if (!plant) {
